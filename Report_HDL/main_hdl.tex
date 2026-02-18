@@ -1,0 +1,57 @@
+\documentclass[12pt,a4paper]{book}
+
+
+\input{Files/Packages}
+
+\input{Files/Macros}
+
+
+\title{Hardware Description Language}
+\author{Ranim Tom}
+
+
+%******** Abbreviations **********
+
+% to change the name of Nomenclature to list of abbreviation
+\renewcommand{\nomname}{List of Abbreviations}
+
+% for list of abbreviations and acronyms
+\makenomenclature
+
+
+
+\begin{document}
+
+
+\maketitle
+
+\tableofcontents
+
+\listoffigures
+
+\listoftables
+
+
+% to make the list of abbreviations and acronyms appear 
+% in first pages of the report
+\printnomenclature
+
+
+% to make the todo list appear as a table of content
+\listoftodos
+
+% To adjust the header in the report/book
+
+\pagestyle{fancy}
+\fancyhf{} % Clear header and footer
+\rhead{\rightmark}
+\lhead{Chapter \thechapter}
+\rfoot{Page \thepage}
+
+
+
+\input{content/intro_hdl}
+
+
+
+\end{document}
