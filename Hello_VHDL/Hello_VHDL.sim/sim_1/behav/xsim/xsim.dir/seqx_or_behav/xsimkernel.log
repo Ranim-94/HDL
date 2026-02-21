@@ -1,0 +1,7 @@
+Running: xsim.dir/seqx_or_behav/xsimk -simmode gui -wdb seqx_or_behav.wdb -simrunnum 0 -socket 50817
+Design successfully loaded
+Design Loading Memory Usage: 178972 KB (Peak: 179024 KB)
+Design Loading CPU Usage: 790 ms
+Simulation completed
+Simulation Memory Usage: 260708 KB (Peak: 318240 KB)
+Simulation CPU Usage: 800 ms

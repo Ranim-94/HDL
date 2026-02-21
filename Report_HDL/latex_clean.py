@@ -6,7 +6,7 @@ latex_extensions = [
     ".out", ".synctex.gz", ".tdo", ".toc","lof","lot"
 ]
 
-main_file = "main_hls.tex"
+main_file = "main_hdl.tex"
 
 for root, dirs, files in os.walk("."):
     for file in files:
