@@ -10,8 +10,8 @@
     - [FPGA Target](#fpga-target)
   - [Developement Environment](#developement-environment)
     - [Installation Steps:](#installation-steps)
-    - [Post Installation Step](#post-installation-step)
-    - [Board Files](#board-files)
+    - [Post Installation Step: running `Vivado` from terminal](#post-installation-step-running-vivado-from-terminal)
+    - [Post Installation Step: Board Files](#post-installation-step-board-files)
   - [Resources](#resources)
     - [Digital Desing theory](#digital-desing-theory)
 
@@ -32,7 +32,7 @@ Knowing FPGA target is require when developing `HDL` program using tools such `V
 
 ## Developement Environment
 
-we will use [`Vivado`](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools.html) design suite from AMD
+We use [`Vivado`](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools.html) design suite from AMD.
 
 Select the `web installer` version, because it is faster and takes less space.
 
@@ -50,29 +50,40 @@ Select the `web installer` version, because it is faster and takes less space.
 
 - make sure to use `sudo` so we have permission to create folders,...
 
-When the installer runs, it will ask us to sing in using our AMD account. Then we do these below steps:
+When the installer runs, it will ask us to sing in using our AMD account.
+
+Then we follow steps below:
 
 a. Select `Vivado`  
 b. then `Vivado ML Standard`  
-c. make sure to select the tools as shown in  [pic tools install](install_pic/tools_download.png)  
+c. make sure to select the tools as shown in [Figure 1](#fig1)
+
+<div id="fig1">
+<img src="fig_README_md/tools_download.png" 
+alt="Widget Types" width="550">
+<p><strong>Figure 1:</strong> Tools selection</p>
+</div>
+
 d. Agree to all licesense  
-e. When reaching [install directory step](install_pic/install_dir.png), install the software under `/opt/Xilinx`  
+e. When reaching directory step in [Figure 2](#fig2), install the software under `/opt/Xilinx`  
+
+<div id="fig2">
+<img src="fig_README_md/install_dir.png" 
+alt="Widget Types" width="450">
+<p><strong>Figure 2:</strong> Directory step</p>
+</div>
 
 Now wait for the installer that can finish.
 
-Then after finishing installation, run the command
+### Post Installation Step: running `Vivado` from terminal
 
-### Post Installation Step
-
-1. Running the software
-
-After finishing installation, we should add these 2 lines to our `.bashrc` file:
+In order to lauch `Vivado` from the terminal, we add this line to our `.bashrc` file:
 
 <pre>export PATH=/opt/Xilinx/2025.1/Vivado/bin:$PATH</pre>
 
-Now we can run `Vivado` from the terminal to lauch the program.
+Now we can run `Vivado` from the terminal to lauch the program by typing the command `Vivado`.
 
-### Board Files
+### Post Installation Step: Board Files
 
 Since we are using `Basys3` baord, we need to import its definitions files from [`Digilent board files`](https://github.com/Digilent/vivado-boards), then install the `Basys3` board file under:
 

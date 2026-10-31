@@ -52,7 +52,7 @@ alt="Widget Types" width="850">
 3. Now as for default part, that is the board part, we search for `xc7a35tcpg236-1` (this is for `Basys3` board)
 
 <div id="fig3">
-<img src="Figures_VsCode/Hello_VHDL/proj_type_rtl.png" 
+<img src="Figures_VsCode/Hello_VHDL/fpga_name.png" 
 alt="Widget Types" width="850">
 <p><strong>Figure 3:</strong> Selecting FPGA chip</p>
 </div>
@@ -76,14 +76,16 @@ alt="Widget Types" width="850">
 ## Some errors while typing my 1st VHDL code
 
 1. when declaring enity, `entity seqx_or`, directly type `end seqx_or;` to avoid mistakes
-   1. same things with architecture, processe, if else statement,....
+   - same things with architecture, processe, if else statement,....
 
 2. Signal names like `A`,`B`, don't use `''` inside the `if-else`
-   1. only bits (`1` and `0`) or character litterals use `''`
+   - only bits (`1` and `0`) or character litterals use `''`
 
 ## Running Simulation
 
-Once we finish the code, we go in the flow navigator, under `Simulation`, and click on `Run Simulation`. Once the simulation finishes, a new window appears with some waveform of the input and output as shown in [Figure 5](#fig5)
+Once we finish the code, we go in the flow navigator, under `Simulation`, and click on `Run Simulation`.
+
+Once the simulation finishes, a new window appears with some waveform of the input and output as shown in [Figure 5](#fig5)
 
 <div id="fig5">
 <img src="Figures_VsCode/Hello_VHDL/sim_waveform.png" 
@@ -96,7 +98,7 @@ alt="Widget Types" width="450">
 By default, the simulation shown in [Figure 5](#fig5) choose by default
 value `0` for input `A` and `B`.
 
-If we want to change input values, let's say for `A` for example  
+If we want to change input values, let's say `A` for example  
 
 - right click on `A`
 
@@ -139,6 +141,8 @@ In this section we explore the following:
 ### Saving a waveform
 
 `Vivado` automatically saves the waveform to a `.wdb` file after each run.
+
+- `wdb` stands for waverform data base
 
 It saves the `.wdb` in the `<project>.sim/sim_1/behav/xsim/` directory:
 

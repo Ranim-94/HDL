@@ -1,6 +1,7 @@
 
 
 \chapter{Introduction}
+\label{chap:intro_vhdl}
 
 \section{Why HDL}
 \label{sec:why_hdl}
@@ -323,6 +324,7 @@ Any signal (like a variable) wich is defined in the entity can be used inside th
 
 \end{itemize}
 
+\newpage
 \subsection{Concurrency}
 
 The statement defined outside a process but inside the architecture are executed in parallel with the processes. \autoref{fig:intro_hdl:and_gate_seq_vs_conc} present an example of \verb|AND| implementation
@@ -330,8 +332,8 @@ The statement defined outside a process but inside the architecture are executed
 
 \begin{figure}[h]
 \centering
-\includegraphics[scale=0.4,frame]{Figures/intro_hdl/and_gate_seq_vs_conc}
-\caption{And gate implementation using sequential and concurent style}
+\includegraphics[scale=0.35,frame]{Figures/intro_hdl/and_gate_seq_vs_conc}
+\caption{and gate implementation using sequential and concurent style}
 \label{fig:intro_hdl:and_gate_seq_vs_conc}
 \end{figure} 
 
@@ -339,39 +341,40 @@ The statement defined outside a process but inside the architecture are executed
 
 \item $\mathrm{1}^\mathrm{st}$ implementation sequential style using \verb|if-else|
 
-\item $\mathrm{2}^\mathrm{nd}$ style using \verb|AND| keyword statement , which is concurrent
+\item $\mathrm{2}^\mathrm{nd}$ style using \verb|and| keyword statement , which is concurrent
 
 \end{itemize}
 
-As a desingers, we use a combination of both sequential and concurrent statements.
+As a desingers, we use a combination of both sequential and concurrent statements.\\
 
 Also note that the order of execution of concurrent statement is not important, since they will all be executed in parallel using the capacity of FPGA.
 
+\newpage
 \subsection{Process}
 \label{sub:process}
 
-As we saw processes contains statements that are executed sequentially. \autoref{fig:intro_hdl:process_syntax} presents paramter of \verb|VHDL| process.
+As we saw processes contains statements that are executed sequentially.
+
+\autoref{fig:intro_hdl:process_syntax} presents paramter of \verb|VHDL| process.
 
 \begin{figure}[h]
 \centering
-\includegraphics[scale=0.4,frame]{Figures/intro_hdl/process_syntax}
+\includegraphics[scale=0.35,frame]{Figures/intro_hdl/process_syntax}
 \caption{VHDL process}
 \label{fig:intro_hdl:process_syntax}
 \end{figure}
 
 \begin{itemize}
 
-\item Sensitivyt list is used when a process will be executed
+\item Sensitivity list is used when a process will be executed
 
 	\begin{itemize}
 	\item It is executed when at least 1 of the input is changed
 	\end{itemize}
 
-\item Later we will see why we use sensitivity list in \verb|VHDL|
-
-\item \todo{Sensisitivity list} \uti{Sensisitivity list:} \textit{To get back to it later, and cite the corresponding section in the reader}
-
 \end{itemize}
+
+Later we will see why we use sensitivity list in \verb|VHDL| (\autoref{sec:process_rules}). \\
 
 \newpage
 \section{Some VHDL Examples}
@@ -430,6 +433,7 @@ Actually this one of the \verb|process| rules, which states that:
 
 \newpage
 \section{Process Rules}
+\label{sec:process_rules}
 
 Let's see the \verb|process| rules in this section.
 
@@ -460,6 +464,7 @@ Throughout our progress, we learn more \verb|VHDL| concept and features as neede
 
  
 \subsection{Vectors}
+\label{sub:vectors}
 
 First let's start with signal that are larger than 1 bit, which are \verb|bit_vector|.
 
@@ -478,7 +483,7 @@ An example is shown in \autoref{fig:intro_hdl:vhdl_vectors}.
 
 \item We have \verb|Y_NIB| and \verb|Z_BYTE|, 4 and 8 bit vectors respectevely
 
-\item Note for vectors we use double quotation \verb|""|, as oppsed to signal which use single quotation \verb|''| for 1 bit case
+\item Note for vectors we use double quotation \verb|""|, as opposed to signal which use single quotation \verb|''| for 1 bit case
 
 \item For indices: they are going from left to right as shonw in the $\mathrm{2}^\mathrm{nd}$ part of \autoref{fig:intro_hdl:vhdl_vectors}, with a description in the middle \verb|downto| or \verb|upto|
 
@@ -622,7 +627,7 @@ Now regarding \verb|VHDL| (\ref{sec:vhdl_desing}):
 
  \item An architecture is a combination of many processes, internal variables declaration, $\cdots$ 
  
- \item A \verb|VHDL| rule: an architecture must associated to some entity
+ \item A \verb|VHDL| rule: an architecture must be associated to some entity
 
  \end{itemize}
 
