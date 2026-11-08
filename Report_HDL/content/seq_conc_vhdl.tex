@@ -148,7 +148,7 @@ Now let's review rules of process.
 	
 	\item This mean we won't be able to use \verb|M| for some intermediate computation
 	
-	\item We see later if we want to do such computation, we use \tbi{variables}. We will lear about them later
+	\item If we want to do such computation, we use \tbi{variables}. We learn about them later.
 	\end{itemize}
 
 
@@ -164,7 +164,7 @@ Now let's review rules of process.
 \end{figure}
 
 	\begin{itemize}
-	\item If we make multiple assignment to \tbi{same signal}, only the last one get executed
+	\item If we make multiple assignment to the \tbi{same signal}, only the last one get executed
 	
 	\item So \verb|M <= A;| get ignored
 	
@@ -199,9 +199,12 @@ Now we learned process rules in \ref{sub:process_rules}, let's take an example a
 
 
 \newpage
-\section{Data Types: Integer and Boolean}
+\section{Data Types}
+\label{sub:data_types_2}
 
 So far we dealt with bit and bit vectors data types (\ref{sub:vectors}), we continue explore other data types in \verb|VHDL| such as integers and boolean in this section.\\
+
+\subsection{Integers}
 
 An example is shown in \autoref{fig:seq_conc_vhdl:int_data_type}.
 
@@ -218,6 +221,8 @@ An example is shown in \autoref{fig:seq_conc_vhdl:int_data_type}.
 
 \end{itemize}
 
+\subsection{Boolean}
+
 Also \verb|VHDL| support boolean as shown in \autoref{fig:seq_conc_vhdl:bool_data_type}.
 
 \begin{figure}[h]
@@ -233,10 +238,554 @@ Also \verb|VHDL| support boolean as shown in \autoref{fig:seq_conc_vhdl:bool_dat
 
 \end{itemize}
 
-\newpage
-\section{Summary Processes}
+\subsection{Litteral Assignment}
+\label{sub:litteral_assignm}
 
-Processes (\ref{sec:processes_more}):
+Sometimes we need to do an assignment to signal, and depending on the type of signal, the assignment way may differ. An example is shown in \autoref{fig:seq_conc_vhdl:sig_assignment}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.4,frame]{Figures/seq_conc_vhdl/sig_assignment}
+\caption{Signal assignment}
+\label{fig:seq_conc_vhdl:sig_assignment}
+\end{figure}
+
+\begin{itemize}
+
+\item signal of types bit need quotation
+
+	\begin{itemize}
+	\item signle for bit, and double for bit array
+	\end{itemize}
+
+\item Integer and boolean don't need quotation
+
+\end{itemize}
+
+\newpage
+\subsection{Vector Comparison}
+\label{sub:vec_compar}
+
+When comparing 2 vectors in \verb|VHDL|, we should pay attention that the vector size must mismatch, that is they both have same number of bits, otherwise we may have some unlogical results. An example is shown in \autoref{fig:seq_conc_vhdl:vec_compar}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.4,frame]{Figures/seq_conc_vhdl/vec_compar}
+\caption{Vector comparison}
+\label{fig:seq_conc_vhdl:vec_compar}
+\end{figure}
+
+\begin{itemize}
+
+\item In \verb|VHDL|, comparison is made from \tbi{left to  right}, and \tbi{bit by bit} basis
+
+\item That's why we can't interpret the numbers \verb|M-VEC| and \verb|Q-VEC| as \verb|7| and \verb|8|
+
+\end{itemize}
+
+\newpage
+\subsection{Vector Aggregation and Concatenation}
+\label{sub:vec_aggregat_concat}
+
+Finally we see 2 famous operation with vectors: cocncatenation and aggregration,shown in \autoref{fig:seq_conc_vhdl:vec_aggregate}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.4,frame]{Figures/seq_conc_vhdl/vec_aggregate}
+\caption{Vector aggregation and concatenation}
+\label{fig:seq_conc_vhdl:vec_aggregate}
+\end{figure}
+
+\begin{itemize}
+
+\item We have 2 different architecture: 
+
+	\begin{itemize}
+	\item 1 for aggregation, which uses \verb|(A,B,...)|
+	
+	\item 1 for concatenation, uses \verb|&|
+	\end{itemize}
+
+
+\item for the aggregtation example concerning \verb|Y-VEC|: this is called \tbi{explicit aggregate} 
+
+	\begin{itemize}
+	\item that is index 1 is getting assigned to \verb|A-bit|,index 5 to \verb|B-bit|, and so on 
+	\end{itemize}
+
+\end{itemize}
+
+\newpage
+\section{Sequential and Concurrent Statement}
+\label{sec:select_control_loop}
+
+Now we more about processes, and the concept that inside a process all of the statements are sequential, and outside the process the statements are concurrent, we explore in this section more about the used statements in our desing.
+
+\subsection{If-else}
+\label{sub:if_else}
+
+\verb|if-else| structure are used allot in our desing, and especially the nested \verb|if-else|. An example is shown in \autoref{fig:seq_conc_vhdl:if_else}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.4,frame]{Figures/seq_conc_vhdl/if_else}
+\caption{If else in VHDL}
+\label{fig:seq_conc_vhdl:if_else}
+\end{figure}
+
+\begin{itemize}
+
+\item Each \verb|if| or \verb|elsif| is followed by some condition with some \tbi{priority}
+
+\item Priority value goes from high $\rightarrow$ low when walking down an \verb|if-else| chain:
+
+	\begin{itemize}
+	\item $\mathrm{1}^\mathrm{st}$ \verb|if| has highest priority
+	
+	\item Last \verb|if| has the lowest one
+	\end{itemize}		
+
+\end{itemize}
+
+\newpage
+As implementation, \verb|if-else| are synthesised into MUX circuits:
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.4,frame]{Figures/seq_conc_vhdl/if_else_MUX}
+\caption{If else circuit}
+\label{fig:seq_conc_vhdl:if_else_MUX}
+\end{figure}
+
+\begin{itemize}
+
+\item If we have nested \verb|if-else|, a priority MUX is synthesised as shown in \autoref{fig:seq_conc_vhdl:if_else_MUX}.
+
+\end{itemize}
+
+To complete the \verb|if| example, conside the example shown in \autoref{fig:seq_conc_vhdl:if_simple}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.4,frame]{Figures/seq_conc_vhdl/if_simple}
+\caption{Simple if statment}
+\label{fig:seq_conc_vhdl:if_simple}
+\end{figure}
+
+\begin{itemize}
+
+\item The problem for the \verb|if| statment shown in \autoref{fig:seq_conc_vhdl:if_simple}, we don't have a value for \verb|SEL|
+
+\item So when \verb|SEL = 0|, the hardware is obliged to create a latch to remember the value of \verb|C| 
+
+\item Usually in a desing we need to avoid creating latches, so we try to implement a complete \verb|if| statements
+
+\end{itemize}
+
+\todo{if and latche} \uti{if and latche:}
+
+\begin{itemize}
+
+\item \textit{to see later why this is bad to create latches}
+
+\end{itemize}
+
+\newpage
+In \autoref{fig:seq_conc_vhdl:if_simple_2}, we have 2 way of implementation of a complete \verb|if| statements to prevent latch synthesis
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.4,frame]{Figures/seq_conc_vhdl/if_simple_2}
+\caption{Simple if statment: preventing latches}
+\label{fig:seq_conc_vhdl:if_simple_2}
+\end{figure}
+
+\begin{itemize}
+
+\item The $\mathrm{1}^\mathrm{st}$ one is the normal to complete the \verb|if|: we put a value of \verb|C| inside \verb|else| when we have no value of \verb|SEL|
+
+\item The $\mathrm{2}^\mathrm{nd}$ one is done using a \tbi{default assignment}: we start by assigning \verb|C| a value of \verb|0| before even entering the \verb|if| statement.
+
+	\begin{itemize}
+	\item So when \verb|SEL| is not \verb|1|, the last value of \verb|C| is \verb|0|
+	\end{itemize}
+
+\end{itemize}
+
+The 2 methods implement the same logic, and prevent latches.
+
+\newpage
+\subsection{Case}
+\label{sub:case}
+
+It is true that in \verb|VHDL| we use allot  \verb|if|, but also we can use other types of selection statement, such as the \verb|case|. An example is shown in \autoref{fig:seq_conc_vhdl:case_statement}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.38,frame]{Figures/seq_conc_vhdl/case_statement}
+\caption{Case statement in VHDL}
+\label{fig:seq_conc_vhdl:case_statement}
+\end{figure}
+
+\begin{itemize}
+
+\item Unlike the \verb|if|, the \verb|case| has no priority
+
+\item So a flat MUX is used to synthesise the hardware
+
+\end{itemize}
+
+Also be aware that in the conditions, that is \verb|when .. to ..|, we can't use bit vectors (as shown in \autoref{fig:seq_conc_vhdl:case_statement_2}), we use only normal integer value or some corresponding enumerated type.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.34,frame]{Figures/seq_conc_vhdl/case_statement_2}
+\caption{Case statement in VHDL: valid numerical types}
+\label{fig:seq_conc_vhdl:case_statement_2}
+\end{figure}
+
+\newpage
+\subsubsection{if vs case}
+
+So \verb|if| has priority and \verb|case| has no priorty. Their MUX are shown in \autoref{fig:seq_conc_vhdl:if_vs_case}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.34,frame]{Figures/seq_conc_vhdl/if_vs_case}
+\caption{if vs case}
+\label{fig:seq_conc_vhdl:if_vs_case}
+\end{figure}
+
+\begin{itemize}
+
+\item The MUX of a \verb|case| has fewer gates
+
+\item So if we have no priorty, we should use \verb|case| over \verb|if|
+
+\end{itemize}
+
+Also we can do some nesting between \verb|if| and \verb|case|, and this will result in a complex logic circuit (MUX of MUX).
+
+\newpage
+\subsection{for loop}
+\label{sub:for_loop}
+
+Now we see \verb|for| loop, shown in \autoref{fig:seq_conc_vhdl:for}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.4,frame]{Figures/seq_conc_vhdl/for}
+\caption{for loop}
+\label{fig:seq_conc_vhdl:for}
+\end{figure}
+
+\begin{itemize}
+
+\item Here the code is flipping \verb|B-VEC| bits from  0 $\rightarrow$ 1
+
+\item The \verb|for| loop range goes from 0 $\rightarrow$ \verb|A-INT|
+
+\item This for loop implement the power function $2^{\text{A-INT}-1}$
+
+\end{itemize}
+
+\underline{Notes about \textbf{for} loop:}
+
+\begin{itemize}
+
+\item \verb|for| are rarely used in hardware, and they are used in specialised cases
+
+\item the circuit or the synthesiser don't implement a \verb|for| loop, instead it will implement the equivalent sequential statements, as shown in the $\mathrm{2}^\mathrm{nd}$ part of \autoref{fig:seq_conc_vhdl:for}
+
+\item The \verb|for| loop are generally synthesisable, that is we can use them in a synthesised code
+
+	\begin{itemize}
+	\item but other types of loops (\verb|while()|) we can't use them in a synthesisable code, we can only use them in some verification code
+	\end{itemize}
+
+\end{itemize}
+
+\newpage
+We can also break or jump over an iteration inside a \verb|for| loop, using \verb|next| keyword, as shown in \autoref{fig:seq_conc_vhdl:next}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.4,frame]{Figures/seq_conc_vhdl/next}
+\caption{Jumping over an iteration}
+\label{fig:seq_conc_vhdl:next}
+\end{figure}
+
+\begin{itemize}
+
+\item the \verb|next| also can be implemented an equivalent \verb|if not| as shown in the bottom of \autoref{fig:seq_conc_vhdl:next}
+
+\end{itemize}
+
+\newpage
+\section{Concurrency}
+\label{sec:concurrency_v2}
+
+Now after we have seen different sequential statements, we move to conccurrent one. 
+
+Recall that concurrency (seen for the $\mathrm{1}^\mathrm{st}$ time in \ref{sub:concurrency}) are the satement which happens outside a process, but inside architecture. Their statement runs in parallel, and in continous manner. They require no sensitivity list.\\
+
+In this section we see different types of concurrent statements.
+
+\subsection{Conditional Signal Assignment}
+\label{sub:condit_sig_assign}
+
+The $\mathrm{1}^\mathrm{st}$ one is conditional signal assignment using \verb|when .. else|. An example is shown in \autoref{fig:seq_conc_vhdl:cond_sig_assign}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.4,frame]{Figures/seq_conc_vhdl/cond_sig_assign}
+\caption{Conditional signal assignment}
+\label{fig:seq_conc_vhdl:cond_sig_assign}
+\end{figure}
+
+\newpage
+Conditional signal assignment can be done using sequential \verb|if .. else| statment.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.4,frame]{Figures/seq_conc_vhdl/cond_sig_assign_if_eq}
+\caption{Conditional signal assignment equivalency with if statement}
+\label{fig:seq_conc_vhdl:cond_sig_assign_if_eq}
+\end{figure}
+
+\todo{when and if equivalency} \uti{when and if equivalency:}
+
+\begin{itemize}
+
+\item \textit{To see later which behaviour that gives, and which are the optimum}
+
+\end{itemize}
+
+\newpage
+\subsection{Selected Signal Assignment}
+\label{sub:selected_sig_assign}
+
+The $\mathrm{2}^\mathrm{nd}$ concurrent statment is the selected signal assignment using \verb|with .. select|. An example is shown in \autoref{fig:seq_conc_vhdl:select_sig_assign}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.38,frame]{Figures/seq_conc_vhdl/select_sig_assign}
+\caption{Selected signal assignment}
+\label{fig:seq_conc_vhdl:select_sig_assign}
+\end{figure}
+
+
+As in \ref{sub:condit_sig_assign}, the \verb|with .. select| is equivalent to \verb|case| statement, as shown in \autoref{fig:seq_conc_vhdl:select_sig_assign_case_eq}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.35,frame]{Figures/seq_conc_vhdl/select_sig_assign_case_eq}
+\caption{Selected signal assignment equivalency using case statment}
+\label{fig:seq_conc_vhdl:select_sig_assign_case_eq}
+\end{figure}
+
+\newpage
+\section{VHDL Hierarchy}
+
+Until now, we have seen the basic desing of \verb|VHDL|, that is a \verb|VHDL| module is composed from  minimum 2 parts: entity and architecture (\ref{sec:vhdl_desing}).\\
+
+At some point our work will get bigger and larger, and the easier way is to decompose our \verb|VHDL| program into a \tbi{set of separate modules}, and the recombine these different modules into a larger desing.\\
+
+Let's make the analogy between the program side of \verb|VHDL| and the hierarchy we make in schematics.
+
+We choose schamtics because \verb|VHDL| is describing hardware, and not typical software.\\
+
+In schematics, hierarchy was always done by creating some symbols that groups some logic, like the MUX example seen in \ref{sec:why_hdl}: the shcematic is the MUX symbol, and underneath the symbol is the set of logic gates which formes the MUX.
+
+Another example of shematic hierarchy is shown in \autoref{fig:seq_conc_vhdl:schematic_hierarchy_ex}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.35,frame]{Figures/seq_conc_vhdl/schematic_hierarchy_ex}
+\caption{Schematic hierarchy example}
+\label{fig:seq_conc_vhdl:schematic_hierarchy_ex}
+\end{figure}
+
+\begin{itemize}
+
+\item In the $\mathrm{1}^\mathrm{st}$ block we have some symbol with some input signals \verb|A| and \verb|B|
+
+\item But the symbol is acting like a black box, we don't know the underlying logic beneath it
+
+\item So we need to open another page of the schematic to see what is inside
+
+\end{itemize}
+
+Now in schematic, hierarchy is done via symbols and graphics. \verb|VHDL| is a set of text files, so we don't have graphics.
+
+The way we do hierarchy in \verb|VHDL| is as follows:
+
+\begin{itemize}
+
+\item $\mathrm{1}^\mathrm{st}$ step in schematic was symbol creation $\leftrightarrow$ in \verb|VHDL| we declare a component
+
+\item $\mathrm{2}^\mathrm{nd}$ step in schmatic we place the symbol into another page $\leftrightarrow$ in \verb|VHDL| this called componend instantiation
+
+\item In schamtics, symbols get connected together with wires $\leftrightarrow$ in \verb|VHDL| components get connected together with signals
+
+\end{itemize}
+
+
+\subsection{Example}
+
+
+\subsubsection{System Presentation}
+
+Let's take some practical example about some system we want to implement. The system is shown in \autoref{fig:seq_conc_vhdl:parity_ex}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.35,frame]{Figures/seq_conc_vhdl/parity_ex}
+\caption{Parity Schematic Example}
+\label{fig:seq_conc_vhdl:parity_ex}
+\end{figure}
+
+\begin{itemize}
+
+\item The system computes the parity of some input vector
+
+\item The schematic is composed from 3 symbols wired togther
+
+	\begin{itemize}
+	\item 1 symbol called parity (we have 2 of them)
+	
+	\item and 1 \verb|OR| gate symbol
+	\end{itemize}
+
+\item The signal of parity symbol is connected to \textit{to level signal} \verb|X-vec| and \verb|Y-vec|
+
+\end{itemize}
+
+
+\subsubsection{Component Creation}
+\label{subsub:comp_creat}
+
+So what we can see from the example of \autoref{fig:seq_conc_vhdl:parity_ex}
+
+\begin{itemize}
+
+\item The lower level in a schematic are the symbols
+
+\item In \verb|VHDL|, these lower level are called \tbi{components}
+
+	\begin{itemize}
+	\item The component are nothing more than an entity and an architecture
+	\end{itemize}
+
+\end{itemize}
+
+\newpage
+\autoref{fig:seq_conc_vhdl:parity_symbol_vhdl} presents this analogy between parity symbol and its \verb|VHDL| component.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.40,frame]{Figures/seq_conc_vhdl/parity_symbol_vhdl}
+\caption{Parity symbol, and its VHDL component}
+\label{fig:seq_conc_vhdl:parity_symbol_vhdl}
+\end{figure}
+
+\begin{itemize}
+
+\item To compute the parity of a vector, we \verb|xor| all of its bits
+
+\item this done using conccurrent statment
+
+\end{itemize}
+
+Recall that the parity component will be kept in a spearate file.\\
+
+\autoref{fig:seq_conc_vhdl:or_symbol_vhdl} presents the same concept with \verb|OR| symbol.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.40,frame]{Figures/seq_conc_vhdl/or_symbol_vhdl}
+\caption{OR symbol, and its VHDL component}
+\label{fig:seq_conc_vhdl:or_symbol_vhdl}
+\end{figure}
+
+\newpage
+\subsubsection{Component wiring}
+
+After creating each \verb|VHDL| component for each symbol in our schematic example, we need to connect these components.
+
+In schematic, symbols are connected to top level signals using wires as shown in \autoref{fig:seq_conc_vhdl:components_wiring}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.40,frame]{Figures/seq_conc_vhdl/components_wiring}
+\caption{Symbols wiring}
+\label{fig:seq_conc_vhdl:components_wiring}
+\end{figure}
+
+\subsubsection{Creating top level desing}
+
+After finishing creating lower level of our system, that is creating component for each symbol, we start to implement the top level design, so we can have the \verb|VHDL| program equivalent to the schematic of \autoref{fig:seq_conc_vhdl:parity_ex}.\\
+
+$\mathrm{1}^\mathrm{st}$ step is to create the \tbi{top level entity for the entire system}, as shown in \autoref{fig:seq_conc_vhdl:top_level_entity}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.40,frame]{Figures/seq_conc_vhdl/top_level_entity}
+\caption{Top level entity}
+\label{fig:seq_conc_vhdl:top_level_entity}
+\end{figure}
+
+$\mathrm{2}^\mathrm{nd}$ step is the architectur part, which contained 2 steps.
+
+
+\begin{enumerate}
+
+\item  \tbi{Component Declaration}
+
+Because we want to use the component created in \ref{subsub:comp_creat}, \verb|VHDL| need to declare them first. The way we do this is between \verb|architecture| and \verb|begin|. An example is shown in \autoref{fig:seq_conc_vhdl:or_comp_delcaration} for the \verb|OR| component.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.40,frame]{Figures/seq_conc_vhdl/or_comp_delcaration}
+\caption{OR component declaration}
+\label{fig:seq_conc_vhdl:or_comp_delcaration}
+\end{figure}
+
+	\begin{itemize}
+
+	\item The component declaration is simply copy and past for the component entity 		with minor changes
+
+		\begin{itemize}
+	
+		\item \verb|entity| is replaced \verb|component|
+
+		\item \verb|end ORGATE| is replaced by \verb|end component|
+
+		\end{itemize}
+
+	
+	\end{itemize}
+
+\newpage
+\item \tbi{Component Instantiation} 
+
+Once we declare the components between the \verb|architecture| and \verb|begin|, we need to instantiate the component, that is connect top level signals to component port. This is shown in \autoref{fig:seq_conc_vhdl:comp_instance}.
+	
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.40,frame]{Figures/seq_conc_vhdl/comp_instance}
+\caption{Components instantiation}
+\label{fig:seq_conc_vhdl:comp_instance}
+\end{figure}	
+	
+
+\end{enumerate}
+
+\newpage
+\section{Summary chap 2}
+
+\subsection{Processes (\ref{sec:processes_more})}
+
 
 \begin{itemize}
 
@@ -254,7 +803,7 @@ Processes (\ref{sec:processes_more}):
 	\item concurrent or sequential
 	
 		\begin{itemize}
-		\item recall from \autoref{chap:intro_vhdl}, that when we work with concurrancy, order of execution is not important since all of them will be executed in parallel using FPGA hardware capability
+		\item recall from \autoref{chap:intro_vhdl}, that when we work with concurrency, order of execution is not important since all of them will be executed in parallel using FPGA hardware capability
 		\end{itemize}
 	
 	\item Depending on the sensistivity list (see \autoref{fig:seq_conc_vhdl:proc_interaction})
@@ -271,9 +820,122 @@ Processes (\ref{sec:processes_more}):
 	\item if multiple assignment to same signal, only the last one get executed
 	\end{itemize}
 
+\end{itemize}
+
+\subsection{Data Types (\ref{sub:data_types_2})} 
+
+\begin{itemize}
+
+\item Explore more data types such as integers and bool data
+
+	\begin{itemize}
+	\item integers can support range of values (see example \autoref{fig:seq_conc_vhdl:int_data_type})
+	\end{itemize}
+
+\item Litterale assignment (\ref{sub:litteral_assignm})
+
+	\begin{itemize}
+	\item depending on type of variables, we may use single quote (for bit), double quotation (bit vectors), or no quotation at all (boolean and integers)
+	\end{itemize}
+
+\item Vector comparison (\ref{sub:vec_compar})
+
+	\begin{itemize}
+	\item comparison is done from left to right, and bit by bit basis
+	
+	\item We should pay attention to size of vectors (how many bits), and prevent vector mismatch
+	\end{itemize}
+
+
+\item Vector operation (aggregtaion and concatentation) (\ref{sub:vec_aggregat_concat})
+
+	\begin{itemize}
+	\item concatenation uses \verb|,|
+
+	\item aggregation usees \verb|&|
+	
+	\item The 2 operation lead to same result
+	
+	
+	\item For aggregation: we have what is called explicit aggregation , that is assigning the indices of each vector to a certain value
+	
+	\item Recall from \ref{sub:bit_vectors}, that indices fo bit vectors are specfied using keyword \verb|downto| or \verb|upto|
+	
+
+	
+		\begin{itemize}
+		\item example: 3 \verb|downto| 0
+		
+		\item index 3 is from left and 0 from right
+		\end{itemize}
+	
+	\end{itemize}
 
 \end{itemize}
 
+\subsection{Selection Control (\ref{sec:select_control_loop})}
+
+\begin{enumerate}
+
+\item \verb|if-else| (\ref{sub:if_else})
+
+	\begin{itemize}
+	\item the conditions comes with priority: from higest to lowest (see \autoref{fig:seq_conc_vhdl:if_else})
+	
+	\item It is preferred to implement a complete \verb|if-else| to prevent latch syntehsis (see \autoref{fig:seq_conc_vhdl:if_simple})
+	
+	\end{itemize}
+
+\item \verb|case| (\ref{sub:case})
+
+	\begin{itemize}
+	\item no priority as in \verb|if-else|
+	
+	\item we can't use bit vectors inside \verb|when .. to| since bit vectors have no nuemrical meaning, they are just array of bits
+	
+	\item MUX of \verb|case| has lower gates, so if no priority is required, \verb|case| is preferred
+	\end{itemize}
+	
+\item \verb|for| loop (\ref{sub:for_loop})	
+
+	\begin{itemize}
+	
+	\item rarely used in hardware
+	
+	\item the synthesiser doesn't implement it as in normal programming language, intead it is \tbi{unwrapped} to its equivalent sequential statements
+	
+	\item it can be used in circuit synthesis unlike other types of loop (\verb|while| loop)
+	
+	\item we can jump or break an iteration using \verb|next when condition| keyword, or some equivalent \verb|if not condition then|	
+	
+	\end{itemize}
+
+\end{enumerate}
+
+\subsection{Concurrent Statment (\ref{sec:concurrency_v2})}
+
+\begin{enumerate}
+
+\item \verb|when ... else| (\ref{sub:condit_sig_assign})
+
+	\begin{itemize}
+
+	\item comes with priority
+	
+	\item the sequential equivalent is \verb|if-else| inside a \verb|process| (see \autoref{fig:seq_conc_vhdl:cond_sig_assign_if_eq})
+
+	\end{itemize}
+
+
+\item \verb|with ... select| (\ref{sub:selected_sig_assign})
+
+	\begin{itemize}
+	\item no priority required
+	
+	\item sequential equivalent is \verb|case| inside a \verb|process| (see 		\autoref{fig:seq_conc_vhdl:select_sig_assign_case_eq})
+	\end{itemize}		
+
+\end{enumerate}
 
 
 

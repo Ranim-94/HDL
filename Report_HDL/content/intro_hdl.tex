@@ -326,6 +326,7 @@ Any signal (like a variable) wich is defined in the entity can be used inside th
 
 \newpage
 \subsection{Concurrency}
+\label{sub:concurrency}
 
 The statement defined outside a process but inside the architecture are executed in parallel with the processes. \autoref{fig:intro_hdl:and_gate_seq_vs_conc} present an example of \verb|AND| implementation
 
@@ -463,8 +464,8 @@ These rules are a little bit of strang at first, but we will revisit them always
 Throughout our progress, we learn more \verb|VHDL| concept and features as needed, so we can grasp concept in a sequential manner.
 
  
-\subsection{Vectors}
-\label{sub:vectors}
+\subsection{Bit Vectors}
+\label{sub:bit_vectors}
 
 First let's start with signal that are larger than 1 bit, which are \verb|bit_vector|.
 
@@ -485,7 +486,7 @@ An example is shown in \autoref{fig:intro_hdl:vhdl_vectors}.
 
 \item Note for vectors we use double quotation \verb|""|, as opposed to signal which use single quotation \verb|''| for 1 bit case
 
-\item For indices: they are going from left to right as shonw in the $\mathrm{2}^\mathrm{nd}$ part of \autoref{fig:intro_hdl:vhdl_vectors}, with a description in the middle \verb|downto| or \verb|upto|
+\item For indices: they are going from left to right as shown in the $\mathrm{2}^\mathrm{nd}$ part of \autoref{fig:intro_hdl:vhdl_vectors}, with a description in the middle \verb|downto| or \verb|upto|
 
 \end{itemize}
 
