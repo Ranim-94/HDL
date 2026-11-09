@@ -586,6 +586,7 @@ As in \ref{sub:condit_sig_assign}, the \verb|with .. select| is equivalent to \v
 
 \newpage
 \section{VHDL Hierarchy}
+\label{sec:vhdl_hierarchy}
 
 Until now, we have seen the basic desing of \verb|VHDL|, that is a \verb|VHDL| module is composed from  minimum 2 parts: entity and architecture (\ref{sec:vhdl_desing}).\\
 
@@ -630,9 +631,8 @@ The way we do hierarchy in \verb|VHDL| is as follows:
 
 \end{itemize}
 
-
-\subsection{Example}
-
+\subsection{Example: Parity System}
+\label{sub:ex_parity}
 
 \subsubsection{System Presentation}
 
@@ -746,14 +746,14 @@ Because we want to use the component created in \ref{subsub:comp_creat}, \verb|V
 
 \begin{figure}[h]
 \centering
-\includegraphics[scale=0.40,frame]{Figures/seq_conc_vhdl/or_comp_delcaration}
+\includegraphics[scale=0.38,frame]{Figures/seq_conc_vhdl/or_comp_delcaration}
 \caption{OR component declaration}
 \label{fig:seq_conc_vhdl:or_comp_delcaration}
 \end{figure}
 
 	\begin{itemize}
 
-	\item The component declaration is simply copy and past for the component entity 		with minor changes
+	\item The component declaration is simply copy and past for the component entity with minor changes
 
 		\begin{itemize}
 	
@@ -762,12 +762,21 @@ Because we want to use the component created in \ref{subsub:comp_creat}, \verb|V
 		\item \verb|end ORGATE| is replaced by \verb|end component|
 
 		\end{itemize}
-
-	
+			
 	\end{itemize}
 
+Also in declaration, we declare any internal signal we need after so we can make connections as shown in \autoref{fig:seq_conc_vhdl:internal_sig_delcar}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.37,frame]{Figures/seq_conc_vhdl/internal_sig_delcar}
+\caption{Internal signal declaration}
+\label{fig:seq_conc_vhdl:internal_sig_delcar}
+\end{figure}
+
+
 \newpage
-\item \tbi{Component Instantiation} 
+\item \tbi{Component Instantiation (Wiring part)} 
 
 Once we declare the components between the \verb|architecture| and \verb|begin|, we need to instantiate the component, that is connect top level signals to component port. This is shown in \autoref{fig:seq_conc_vhdl:comp_instance}.
 	
@@ -778,6 +787,114 @@ Once we declare the components between the \verb|architecture| and \verb|begin|,
 \label{fig:seq_conc_vhdl:comp_instance}
 \end{figure}	
 	
+	\begin{itemize}
+
+	\item Here we have 3 component instantiated
+	
+	\item Each one of them has a \tbi{label}: \verb|U1|,\verb|U2| and \verb|U3|
+	
+	\end{itemize}		
+
+When we instantiate a component, we map the pins of the component to the pins of the top level desing
+
+\begin{itemize}
+
+\item Component \verb|U1|: its pins when creating this component are \verb|IN-VEC| and \verb|PAR-OUT|
+
+\item \verb|IN-VEC| is mapped to \verb|X-VEC|
+
+\item \verb|PAR-OUT| is mapped to internal signal \verb|PARITY-1|
+
+\end{itemize}
+	
+\newpage
+The style of mapping we are using when instantiating a component is known as \tbi{explicit mapping}, shown in \autoref{fig:seq_conc_vhdl:port_map_exp}. 
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.38,frame]{Figures/seq_conc_vhdl/port_map_exp}
+\caption{Explicit port mapping}
+\label{fig:seq_conc_vhdl:port_map_exp}
+\end{figure}
+
+\begin{itemize}
+
+\item In formal \verb|VHDL|, the pin name of the component created in a spearate file is known as \textit{formal signal}
+
+\item The internal net belonging to the top level desing is called \textit{actual signal}
+
+\item In this type of mapping, order is not important, since we are using formal signal and actual signal.
+
+\end{itemize}
+
+There is also what is called relative port mapping, where in the instantitation we list only the actual signals of the top level desing, and in this mapping order is important.
+
+However in our code we use explicit since it gives more information (even if there is more typing).
+
+\newpage
+\section{Test bench}
+\label{sec:test_bench}
+
+The concepts seen before in \autoref{sec:vhdl_hierarchy} (component declaration and instantiation) are going to be used also in what is called \textit{test bench}.
+
+Test bench is a method to verify if our desing work properly or not. This is done by applying a set of \textit{stimulus} to our input signals, and see if we obtain the correct output.
+
+In \autoref{fig:seq_conc_vhdl:test_bench_temp_sys}, we have an example how to create a testbench for the thermostat system we start it with.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.38,frame]{Figures/seq_conc_vhdl/test_bench_temp_sys}
+\caption{Test bench for the thermostat system}
+\label{fig:seq_conc_vhdl:test_bench_temp_sys}
+\end{figure}
+
+\begin{itemize}
+
+\item A testbench is a separate file where our desing is being instantiated and used
+
+\item For testbench, the \verb|entity| has no input or output port, since we are testing our design internally
+
+\item So as seen in \autoref{sec:vhdl_hierarchy}, we need to declare our desing first then instantiate
+
+\item The declaration is shown in the $\mathrm{2}^\mathrm{nd}$ subfigure of \autoref{fig:seq_conc_vhdl:test_bench_temp_sys} (top right)
+
+\item Also in testbench: for each input signal we need to test it (apply some input value), we declare it as internal signal
+
+	\begin{itemize}
+	\item That's why we have for example the 3 \verb|signal| lines after component declaration
+	\end{itemize}
+
+\item After declaration, we instantiate the component and give it a label
+
+	\begin{itemize}
+	\item it is labeled as \verb|UUT|
+	\end{itemize}
+
+\item Note that in the instantiation of component in testbench is a special case
+
+	\begin{itemize}
+	\item The pins of our component is not connected to some other top level actual signals as in \autoref{fig:seq_conc_vhdl:port_map_exp}
+	
+	\item The pins are connected to them self, since we are testing our component	
+	
+	\end{itemize}
+
+\item After isntantiation, we start a \verb|process| with no sensitivity list
+
+	\begin{itemize}
+	\item This makes the \verb|process| start directly once the simulator starts
+	\end{itemize}
+
+
+\item Inside the \verb|process|, we start apply some input values to some input signal, then use the statement \verb|wait for ..|, and then apply some other value (change the input)
+
+	\begin{itemize}
+	\item Here in the example we changed the value of \verb|DISPLAY-SELECT|
+	\end{itemize}
+
+
+\end{itemize}
+
 
 \end{enumerate}
 
@@ -936,6 +1053,85 @@ Once we declare the components between the \verb|architecture| and \verb|begin|,
 	\end{itemize}		
 
 \end{enumerate}
+
+\subsection{VHDL Hierarchy (\ref{sec:vhdl_hierarchy})}
+
+\begin{itemize}
+
+\item Idea is to make our work more modular when our work is starting to be bigger and larger
+
+\end{itemize}
+
+Generale steps taken from the parity system in \ref{sub:ex_parity}:
+
+\begin{enumerate}
+
+\item Understand the system, and compose it to its lower details
+
+	\begin{itemize}
+	\item That is how many component should we have to describe the entire system
+	
+	\item In parity example, we used 3 components: 2 parity component and 1 \verb|OR| gate component
+	\end{itemize}
+
+
+\item Implement each component in a separate \verb|VHDL| file
+
+	\begin{itemize}
+	\item This will be normal \verb|vhdl| coding, where each component will have its \verb|entity| and \verb|architecture|
+	\end{itemize}
+
+\item After finishing all the component, we start by the \textit{top level desing}. In this step, we have 2 steps:
+
+	\begin{enumerate}
+	\item Component Declaration 
+	
+		\begin{itemize}
+		\item we delcare each component 1 time even if we use it 					multiple time
+		
+		\item It is a simple copy and past of the \verb|entity| of the component with replacement (\verb|component OR|  \verb|end component|)
+		\end{itemize}		
+	
+	\item Component instantiation
+	
+		\begin{itemize}
+		\item We give our component a \textit{label}
+		
+		\item we do explicit port mapping: assigning formal signal (name of our signal in the component created) to the actual signal belonging to the top level desing
+		\end{itemize}
+	
+	\end{enumerate}
+
+\end{enumerate}
+
+\subsection{Test Bench (\ref{sec:test_bench})}
+
+\begin{itemize}
+
+\item Test bench is a software method to verify if our desing work correctly
+
+\item Main idea: apply a set of input, and see if we obtain the correct output
+\end{itemize}
+
+General notes regarding test bench \verb|VHDL| file:
+
+\begin{itemize}
+
+\item \verb|entity| has no input or output port
+
+\item We need to declare and instantiate our component
+
+\item For all input signals we are going to test, we need to declare them as internal variables
+
+\item Component instantiation: port mapping is a special case
+
+	\begin{itemize}
+	\item Pins are mapped to them self since we are goiing to test them
+	\end{itemize}
+
+\end{itemize}
+
+
 
 
 

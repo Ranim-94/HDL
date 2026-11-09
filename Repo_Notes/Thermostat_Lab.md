@@ -13,7 +13,7 @@ To grasp different `VHDL` concept, we will work thgrough the **thermostat lab** 
 
 <div id="fig1">
 <img src="Figures_VsCode/themorstat_system.png" 
-alt="Widget Types" width="850">
+alt="Widget Types" width="550">
 <p><strong>Figure 1:</strong> Thermostat system</p>
 </div>
 
