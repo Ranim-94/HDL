@@ -7,7 +7,8 @@ entity thermo_en is
 port(
 
 -- Input : 3 input in total
--- 2 7 bit vec and 1 bit
+--  - 2 (7 bit vec) 
+--  - and 1 bit
 temp_current,temp_desired: in bit_vector(6 downto 0);
 select_disp: in bit;
 
