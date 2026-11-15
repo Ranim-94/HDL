@@ -2,6 +2,16 @@
 
 # Thermostat Lab
 
+## Table of Contents
+
+- [Thermostat Lab](#thermostat-lab)
+  - [Table of Contents](#table-of-contents)
+  - [Introduction](#introduction)
+    - [Intro to theremostat system](#intro-to-theremostat-system)
+  - [Test bench](#test-bench)
+  - [Part 2](#part-2)
+  - [Some errors while coding](#some-errors-while-coding)
+    - [if-else](#if-else)
 
 ## Introduction
 
@@ -12,7 +22,7 @@ To grasp different `VHDL` concept, we will work thgrough the **thermostat lab** 
 [Figure 1](#fig1) presents the thermostat system we want to work with.
 
 <div id="fig1">
-<img src="Figures_VsCode/themorstat_system.png" 
+<img src="Figures_VsCode/thermostat_system.png" 
 alt="Widget Types" width="550">
 <p><strong>Figure 1:</strong> Thermostat system</p>
 </div>
@@ -31,7 +41,7 @@ To test our desing we implement also a simple test bench file, called `test_ther
 - however for test file, the `test_thermostat.vhd` need to be in `Simulation Sources`, under sources in project manager as shown in [Figure 2](#fig2)
 
 <div id="fig2">
-<img src="Figures_VsCode/themorstat_test.png" 
+<img src="Figures_VsCode/thermostat_test.png" 
 alt="Widget Types" width="550">
 <p><strong>Figure 2:</strong> Thermostat test file location</p>
 </div>
@@ -63,6 +73,36 @@ Also to navigate the wave figure and see results, use navigation buttons shown i
 alt="Widget Types" width="450">
 <p><strong>Figure 5:</strong> Navigating the wav test</p>
 </div>
+
+## Part 2
+
+Now we move to part 2, where we extend our system of [Figure 1](#fig1).
+
+The extended system is shown in [Figure 6](#fig6)
+
+<div id="fig6">
+<img src="Figures_VsCode/thermostat_part_2.png" 
+alt="Widget Types" width="450">
+<p><strong>Figure 6:</strong> Thermostat part 2</p>
+</div>
+
+Now our themostat lab has extra functionalities, that is we have AC (for cooling) and Furnance mode (for heating), controlled by 2 switches added to the input side
+
+- so we added 2 inputs and 2 outputs
+
+<u>AC is ON:</u>
+
+1. `cool` switch is ON
+2. `TEMP_CURRENT` > `TEMP_DESIRED`
+   - `TEMP_CURRENT` is high so it is hot
+
+
+<u>Furnance is ON:</u>
+
+1. `heat` switch is ON
+2. `TEMP_CURRENT` < `TEMP_DESIRED`
+   - `TEMP_CURRENT` is low so it is cold
+
 
 ## Some errors while coding
 

@@ -2,3 +2,6 @@ Running: xsim.dir/T_TEMPMUX_behav/xsimk -simmode gui -wdb T_TEMPMUX_behav.wdb -s
 Design successfully loaded
 Design Loading Memory Usage: 179328 KB (Peak: 179380 KB)
 Design Loading CPU Usage: 790 ms
+Simulation completed
+Simulation Memory Usage: 262036 KB (Peak: 318596 KB)
+Simulation CPU Usage: 810 ms
