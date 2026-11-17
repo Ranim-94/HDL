@@ -19,6 +19,10 @@
     - [Test bench must be updated](#test-bench-must-be-updated)
   - [Extra Notes](#extra-notes)
     - [Comparing bit\_vector with \> and \<](#comparing-bit_vector-with--and-)
+  - [Test bench](#test-bench)
+    - [Test cases](#test-cases)
+    - [wait for statement](#wait-for-statement)
+    - [assert](#assert)
 
 ## Context
 
@@ -293,3 +297,236 @@ To do:
 - On `bit_vector`, `>` and `<` compare **bit by bit from the left** (lexicographic order), not as numbers.
 - For two vectors of the **same length** (like our two 7-bit vectors), this gives the same result as an **unsigned** number comparison, so it works here.
 - Later, it is better to use the `unsigned` type from `numeric_bit` (or `numeric_std` with `std_logic`), which makes the numeric meaning explicit.
+
+## Test bench
+
+The test bench is `test_theromstat.vhd`. It has 2 main tests:
+
+1. **Display** functionality (`select_disp` → `temp_disp`)
+2. **AC and Furnace** functionality, split into sub-cases
+
+### Test cases
+
+Recall the rule: an output is **ON** only if **all** its conditions are true (its switch is ON **and** the temperature condition is met). In **every other case** it must be **OFF**.
+
+When writing tests, the natural thing is to test the **ON cases**, i.e. checking that the AC or furnace works. But most bugs hide in the cases we tend to forget:
+
+- **ON → OFF transitions:** an output that **was** ON must turn OFF when one of its conditions stops being true (e.g. we slide its switch OFF). This is exactly the case my first implementation failed (the latch kept `ac = '1'`).
+- **OFF cases:** if only **one** of the two conditions is true, the output must stay OFF. Both combinations must be tested:
+  - temperature condition true, but switch OFF
+  - switch ON, but temperature condition false
+
+<u>Summary of the test cases</u>
+
+| Test | Purpose | `sw_cool` | `sw_heat` | Temperatures | Expected |
+|---|---|---|---|---|---|
+| 1 | Display: `select_disp = '0'` then `'1'` | – | – | current = 00, desired = 7F | `temp_disp` = 7F then 00 |
+| 2.1.a | ON: furnace | `'0'` | `'1'` | cold (current < desired) | furnace ON, AC OFF |
+| 2.1.b | ON: AC | `'1'` | `'0'` | hot (current > desired) | AC ON, furnace OFF |
+| 2.1.c | ON → OFF: AC switch slid OFF, still hot | `'0'` | `'0'` | hot (unchanged) | both OFF |
+| 2.2.a | OFF: hot, but switches OFF | `'0'` | `'0'` | hot | both OFF |
+| 2.2.b | OFF: cold, but switches OFF | `'0'` | `'0'` | cold | both OFF |
+| 2.3.a | OFF: AC switch ON, but cold | `'1'` | `'0'` | cold | both OFF |
+| 2.3.b | OFF: furnace switch ON, but hot | `'0'` | `'1'` | hot | both OFF |
+| 2.4 | Edge case: equal temperatures | see below | see below | current = desired = 7F | both OFF |
+
+<u>Set inputs explicitly, or say that you rely on the previous value</u>
+
+A signal keeps its value until it is assigned again. So if a test does not set an input, it **silently inherits** the value left by the previous test. This causes 2 problems:
+
+- the test **depends on the order** of the tests: if someone reorders or removes the previous test, this one silently tests something different;
+- a reader **cannot tell** whether the inherited value is intended or a mistake.
+
+**Rule:** each test case sets **all** the inputs it depends on and has one stated purpose. If a test **must** rely on the previous state, say so in a comment.
+
+Review of each case:
+
+| Test | Inputs set explicitly | Inputs inherited | OK? |
+|---|---|---|---|
+| 1 | temps, `select_disp` | switches (initial value `'0'` of type `bit`) | OK: the switches don't affect the display |
+| 2.1.a | temps, `sw_heat` | `sw_cool` (`'0'` from initial value) | **Better:** add `sw_cool <= '0';` so the case does not depend on the start state |
+| 2.1.b | temps, `sw_cool`, `sw_heat` | – | ✔ fully explicit (and the comment explains why `sw_heat` is reset) |
+| 2.1.c | `sw_cool` | temps, `sw_heat` (from 2.1.b) | ✔ **intended:** a transition test **must** start from the previous state (AC ON). The comment says so. |
+| 2.2.a | temps, both switches (set once for all 2.2.x) | – | ✔ |
+| 2.2.b | temps | switches (from the 2.2 group line) | ✔ the comment "for all 2.2.x cases, switches are off" documents it |
+| 2.3.a | temps, both switches | – | ✔ fully explicit |
+| 2.3.b | temps, both switches | – | ✔ fully explicit |
+| 2.4 | temps | `sw_heat = '1'`, `sw_cool = '0'` (from 2.3.b) | **To fix:** set the switches explicitly, and add an assert (see below) |
+
+<u>Suggested 2.4</u>
+
+The strongest edge-case test is with **both switches ON**: if the outputs stay OFF even then, it is only because of the equal temperatures.
+
+```vhdl
+  -- 2.4) Edge case: both temps are equal, both switches ON
+  -- -> neither '>' nor '<' is true, so both outputs must stay OFF
+  sw_cool <= '1'; sw_heat <= '1';
+  temp_current <= "1111111"; temp_desired <= "1111111";
+
+  wait for 10 ns;
+
+  assert furnace = '0' and ac = '0'
+    report "2.4) failed: equal temps, AC and Furnace should be off" severity error;
+
+  wait; -- End testing
+```
+
+<u>Another case worth adding: both switches ON ("auto" mode)</u>
+
+With both switches ON, the temperature decides: hot → only the AC, cold → only the furnace. This is a realistic use (like the "auto" mode of a real thermostat) and checks that the AC and the furnace never fight each other.
+
+### wait for statement
+
+<u>Changing an input takes effect only at a `wait`</u>
+
+In a process, a signal assignment `<=` does **not** change the signal immediately: it only **schedules** the new value. The new value is applied only when the process **suspends**, i.e. reaches a `wait`.
+
+After the test bench sets the inputs, 2 things must happen before the outputs are correct:
+
+1. **The test bench inputs update:** when the test bench reaches `wait`, `temp_current`, `temp_desired`, `sw_heat`, ... take their new values.
+2. **The design reacts:** these inputs are in the design's sensitivity list, so its process wakes up, runs, and schedules new values for `ac` and `furnace`. They update when the design's process suspends.
+
+These 2 steps take **no simulated time**: they happen in **delta cycles**, small ordering steps inside the same instant (e.g. "20 ns + 1 delta", "20 ns + 2 deltas"). `wait for 10 ns` leaves more than enough room for them. Note that `wait for 0 ns` is **not** enough: it gives only 1 delta, so the inputs are updated but the design has not reacted yet.
+
+The `wait for 10 ns` also gives each test case its own **10 ns slot in the waveform**, which makes it easy to read.
+
+<u>What happens without `wait for`</u>
+
+- **Between 2 test cases:** both cases' assignments are scheduled in the same instant, and for each signal the **last assignment wins**. The first case **never happens**. Example: removing the `wait` after 2.2.a means the temps of 2.2.a are immediately replaced by those of 2.2.b, so 2.2.a is never applied.
+- **After the last test case (no `wait` at all after 2.4):** a process without a sensitivity list is an **infinite loop**. At `end process` it jumps straight back to `begin`, and the 2.4 values are overwritten in the same instant by test 1. So 2.4 is never seen.
+- **A process with no `wait` at all:** it loops forever at time 0, and the simulation **hangs**.
+
+<u>Why the final `wait;`</u>
+
+With only `wait for 10 ns;` after 2.4, the edge case is seen, but the process loops back to test 1 and the **whole test repeats** until the simulation time limit (1000 ns by default in Vivado). Also, the 2nd round is **not** the same as the 1st, because the switches keep the values left by the last test (another reason to set inputs explicitly).
+
+`wait;` with nothing after it means **suspend forever**:
+
+- the stimulus runs **exactly once**, in a known order, from a known start state;
+- the inputs keep their last values, and the waveform stays flat;
+- no events are left, so with "run all" the simulator stops on its own;
+- each assert fires at most once (no repeated error messages).
+
+| Ending of the process | Result |
+|---|---|
+| no `wait` after 2.4 | 2.4 is overwritten instantly and never seen |
+| `wait for 10 ns;` only | 2.4 is seen, but the whole test repeats forever, with different starting switch values |
+| `wait for 10 ns;` + `wait;` | 2.4 is seen, the test runs once, the simulation can end cleanly |
+
+### assert
+
+<u>What `assert` means</u>
+
+An `assert` is a statement about the design: "at this point, this condition **must** be true". The simulator checks it. If it is true, nothing happens. If it is false, the simulator prints a message.
+
+It works like `assert` in other languages:
+
+| Language | Syntax |
+|---|---|
+| Python | `assert x > 0, "x must be positive"` |
+| C++ | `assert(x > 0);` |
+| MATLAB | `assert(x > 0, 'x must be positive')` |
+| VHDL | `assert x > 0 report "x must be positive" severity error;` |
+
+> We write the condition we **expect**, not the error condition: `assert ac = '1'` means "I expect `ac` to be `'1'`, complain if it isn't".
+
+<u>The 3 parts</u>
+
+```vhdl
+assert   <condition>        -- what should be true
+report   "<message>"        -- printed only if the condition is false
+severity <level>;           -- how serious the failure is
+```
+
+| Level | Meaning | Effect in Vivado |
+|---|---|---|
+| `note` | information | print and continue |
+| `warning` | suspicious | print and continue |
+| `error` | the test failed | print and continue → all failures are seen in one run |
+| `failure` | fatal | print and **stop the simulation** |
+
+Unlike Python or C++, a failed VHDL assert does not necessarily stop the program: with `severity error`, the simulation continues, so one run can report several failed tests.
+
+The message appears in the **Tcl Console** (bottom of Vivado), with the simulation time:
+
+```
+Error: 2.1.a) failed: furnace should be ON
+Time: 30 ns  Iteration: 0  Process: /T_TEMPMUX/line__53  File: .../test_theromstat.vhd
+```
+
+<u>Why use asserts</u>
+
+- **No more checking the waveform by eye:** expectations written as comments (`-- temp_disp = 7F`) become checks done by the simulator. A comment can be wrong without anyone noticing; an assert can't.
+- **Regression testing:** after changing the design, re-run the test bench: a quiet Tcl console means nothing broke.
+- **Simulation only:** synthesis ignores asserts, so they cost nothing in hardware. They can also be put in the design itself to check something that must always hold:
+
+```vhdl
+assert not (ac = '1' and furnace = '1')
+  report "AC and furnace ON at the same time!" severity failure;
+```
+
+<u>The importance of `wait` before `assert`</u>
+
+The pattern is always: **set inputs → wait → assert outputs.**
+
+The assert checks the **outputs**, and they are only correct after the 2 steps described in [wait for statement](#wait-for-statement). If the assert comes **before** the `wait`, it reads the **old** values, from before the inputs were changed.
+
+Timing example with 2.1.a, if the assert is moved before the wait:
+
+```vhdl
+  temp_current <= "0000000"; temp_desired <= "1111111";
+  sw_heat <= '1';
+  assert furnace = '1' and ac = '0'   -- runs NOW, at 20 ns
+    report "2.1.a) failed: furnace should be ON" severity error;
+  wait for 10 ns;
+```
+
+At 20 ns, when the assert runs:
+
+| Signal | Value seen by the assert | Why |
+|---|---|---|
+| `sw_heat` | `'0'` | the new `'1'` is only scheduled |
+| `furnace` | `'0'` | left over from test 1 (both switches OFF) |
+| `ac` | `'0'` | left over from test 1 |
+
+`furnace = '1'` is false → the assert reports **"2.1.a) failed"** even though the design is correct. The test bench is wrong, not the design.
+
+It can also go the other way: a **false pass**. If the previous test happened to leave the expected values on the outputs, the assert passes even if the design is broken for the new case. This is worse, because it goes unnoticed.
+
+With the assert **after** `wait for 10 ns`, it runs at 30 ns, when the inputs and outputs have settled: `furnace = '1'`, `ac = '0'` → the assert passes silently.
+
+<u>Timeline of the whole test bench</u>
+
+| Time | Test | Assert checked at the end of the slot |
+|---|---|---|
+| 0 – 10 ns | 1, `select_disp = '0'` | – |
+| 10 – 20 ns | 1, `select_disp = '1'` | – |
+| 20 – 30 ns | 2.1.a | at 30 ns |
+| 30 – 40 ns | 2.1.b | at 40 ns |
+| 40 – 50 ns | 2.1.c | at 50 ns |
+| 50 – 60 ns | 2.2.a | at 60 ns |
+| 60 – 70 ns | 2.2.b | at 70 ns |
+| 70 – 80 ns | 2.3.a | at 80 ns |
+| 80 – 90 ns | 2.3.b | at 90 ns |
+| 90 – 100 ns | 2.4 | at 100 ns (once the assert is added) |
+| 100 ns → | `wait;` | process suspended forever |
+
+<u>Trying it out: a deliberately false assert</u>
+
+To see what a failure looks like, add a wrong check right after the 2.1.a assert (the furnace is ON there, so this must fail), run the simulation and look at the Tcl Console:
+
+```vhdl
+  -- DEMO: deliberately wrong check, remove after testing
+  assert furnace = '0'
+    report "DEMO) this assert is meant to fail: furnace is ON" severity error;
+```
+
+- With `severity error`: the message appears at 30 ns and the simulation continues.
+- With `severity failure`: the simulation **stops** at 30 ns.
+
+Remove the demo assert afterwards.
+
+<u>Going further</u>
+
+- **Exhaustive testing:** the AC/furnace logic has only 7 + 7 + 2 = 16 input bits (about 65 000 combinations), so 2 nested loops over all temperature pairs, checked against an integer comparison (`i > j`), can test every case in a few seconds of simulation.
+- For bigger designs, where testing everything is impossible: randomized tests and frameworks like VUnit or OSVVM.

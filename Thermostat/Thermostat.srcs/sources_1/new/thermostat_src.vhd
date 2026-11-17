@@ -42,12 +42,13 @@ begin
     end if;
 
     -- ====================== Part 2: AC and Furnace ======================
-    -- adding AC and Furnace functionality according to conditions
+    -- Adding 'AC' and 'Furnace' functionality according to conditions
 
-    ac      <= '0';  -- defaults (must come BEFORE the ifs)
+    -- set default values: AC and Furnace in OFF state (must come BEFORE the ifs)
+    ac      <= '0';  
     furnace <= '0';
-    -- Note: read i Thermo_Part_2_Notes.md why using default values is necessary
-    -- and the ifs alone are not enough    
+    -- Note: read i 'Thermo_Part_2_Notes.md' why using default values is necessary
+    -- and why the [ifs] alone are not enough    
 
     -- AC mode
     if sw_cool = '1' and temp_current > temp_desired then
