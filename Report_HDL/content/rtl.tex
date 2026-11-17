@@ -1,0 +1,161 @@
+
+
+\chapter{RTL}
+
+\section{Introduction}
+
+So far we used combinational logic to describe simple logic, but at some point in time we need to describe more complex logic.
+
+In order to do this, we need to store information and use it, and we do so using flip-flops (FF). Basically, a FF is an element which stores 1 bit of information during 1 clock cycle.\\
+
+In the next section, we take a more detailed look at FFs.
+
+\newpage
+\section{Flip Flop}
+\label{sec:FF}
+
+As stated earlier, a FF is a logic element which stores 1 bit of information during 1 clock cycle. A schematic representation is shown in \autoref{fig:rtl:D_FF}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.4,frame]{Figures/rtl/D_FF}
+\caption{D-FF}
+\label{fig:rtl:D_FF}
+\end{figure}
+
+\begin{itemize}
+
+\item This type of FF is known as D-FF
+
+\item It has 1 input \verb|D|, and 1 clock signal input
+
+\item 1 output \verb|Q|
+
+\item Its function: it takes the value of input \verb|D| at the rising edge of the clock, and puts it into \verb|Q|
+
+	\begin{itemize}
+	\item Even if the value of \verb|D| changes during the clock period, the value of \verb|Q| stays intact
+	
+	\item \verb|Q| only changes its value at the next edge of the clock
+	\end{itemize}
+
+
+\end{itemize}
+
+
+\subsection{Cascading FF}
+
+Usually in design we cascade FFs as shown in \autoref{fig:rtl:D_FF_cascad}. This causes the signal to propagate through the FFs.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.4,frame]{Figures/rtl/D_FF_cascad}
+\caption{Cascaded D-FFs}
+\label{fig:rtl:D_FF_cascad}
+\end{figure}
+
+\begin{itemize}
+
+\item Signal \verb|A| goes high at the $\mathrm{2}^\mathrm{nd}$ rising edge of the clock
+
+	\begin{itemize}
+	\item This causes signal \verb|B| to go high
+	\end{itemize}
+
+\item Same concept between \verb|C| and \verb|B| at the $\mathrm{3}^\mathrm{rd}$ clock cycle
+
+\end{itemize}
+
+
+\uti{Cascade FF:} \todo{Cascade FF}
+
+\begin{itemize}
+\item \textit{I think there is something missing concerning \autoref{fig:rtl:D_FF_cascad}}
+
+\item \textit{I recall that it has something to do with the concept that for D-FF, we need to look at the previous clock period}
+
+\item \textit{I documented this in the HLS report, I will see it later}
+
+\end{itemize}
+
+\subsection{FF and Logics}
+
+In a desing, usually we add some combinational logic in addition to the sequential logic, as shown in \autoref{fig:rtl:D_FF_cascad_comb_logic}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.4,frame]{Figures/rtl/D_FF_cascad_comb_logic}
+\caption{Cascaded D-FFs with combinational logic}
+\label{fig:rtl:D_FF_cascad_comb_logic}
+\end{figure}
+
+\begin{itemize}
+
+\item Combinational logic produces some output which will be stored in FF for 1 clock period
+
+\item Then the output may be used by the $\mathrm{2}^\mathrm{nd}$ combinational logic before it is sotred in the $\mathrm{2}^\mathrm{nd}$ FF
+
+\end{itemize}
+
+This is the idea of what we call RTL desing in synchronous design.
+
+\newpage
+\subsection{Combinatoral Delay}
+
+Each time we use some combinational logic between FF, the output from 1 FF to another FF takes some amoun of time to propagate. This is known as the propagation delay.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.4,frame]{Figures/rtl/comb_prop_delay}
+\caption{Propagation Delay}
+\label{fig:rtl:comb_prop_delay}
+\end{figure}
+
+Usually in a design, we have many combinational logic scattered between the FF as in \autoref{fig:rtl:critical_delay}. 
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.4,frame]{Figures/rtl/critical_delay}
+\caption{Critical Delay}
+\label{fig:rtl:critical_delay}
+\end{figure}
+
+What determines the delay of the circuit is the \tbi{comb circuit which has the largest delay}, known as the \tbi{critical delay}.
+
+This is one factor, but we will see later that there is also other factors, and usually we let the place and rout tools to figure out the delay.\\
+
+\uti{Critical delay} \todo{critical delay}
+
+\begin{itemize}
+
+\item \textit{To review these concepts later in HLS}
+
+\item \textit{Mainly about the point where propagation delay and clock period comparison: determine if we use or not sequential elements}
+
+\end{itemize}
+
+
+\newpage
+\subsection{Metastability}
+
+In every desing, we have some metastability requirements we need to respect when implementing our desing.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.4,frame]{Figures/rtl/metastability}
+\caption{Metastability in FPGA}
+\label{fig:rtl:metastability}
+\end{figure}
+
+
+\newpage
+\section{Summary RTL}
+
+
+
+
+
+
+
+
+
