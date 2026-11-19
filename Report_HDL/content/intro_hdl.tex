@@ -7,30 +7,30 @@
 \label{sec:why_hdl}
 
 
-Before starting learning \verb|VHDL|, let's see the idea behind \verb|HDL| in general. Consider a mux circuit shown in \autoref{fig:intro_hdl:mux_circuit}.
+Before we start learning \verb|VHDL|, let's look at the idea behind \verb|HDL|s in general. Consider the MUX circuit shown in \autoref{fig:intro_hdl:mux_circuit}.
 
 
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.6,frame]{Figures/intro_hdl/mux_circuit}
-\caption{Different method to describe a MUX circuit}
+\caption{Different methods to describe a MUX circuit}
 \label{fig:intro_hdl:mux_circuit}
 \end{figure}
 
-A MUX can be described using english languages, or the logic gates behind it, or even by LUT. But all these methods are somehow not practical when dealing with some complex design.
+A MUX can be described in plain English, by the logic gates behind it, or even by a LUT. However, none of these methods is practical when dealing with a complex design.
 
-The other method which is better to implement our desing is to give some behaviour for the desing (function), and let the tools figure out what logic needs to be used. As long as the tools implement correctly the behaviour, we don't care about the underlying logic. This is the basic idea behind \verb|HDL| such as \verb|VHDL| and \verb|Verilog|.
+A better way to implement our design is to describe its behaviour (function), and let the tools figure out which logic needs to be used. As long as the tools implement the behaviour correctly, we don't care about the underlying logic. This is the basic idea behind \verb|HDL| such as \verb|VHDL| and \verb|Verilog|.
 
 \newpage
-\subsection{Desing methodolgies}
+\subsection{Design methodologies}
 \label{sub:desing_evolution}
 
-Throughout time, desing evolves through 3 phases:
+Over time, design has evolved through 3 phases:
 
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.4,frame]{Figures/intro_hdl/design_evol}
-\caption{Desing evolution}
+\caption{Design evolution}
 \label{fig:intro_hdl:design_evol}
 \end{figure}
 
@@ -38,45 +38,45 @@ Throughout time, desing evolves through 3 phases:
 
 \item Connecting transistors manually
 
-\item Then use symbol and schematic to simplify the manual connections
+\item Then using symbols and schematics to simplify the manual connections
 
 	\begin{itemize}
-	\item Such in digital desing courses
+	\item As in digital design courses
 	\end{itemize}
 
-\item Then move to \verb|HDL| and let the tools figure out the gates and the schematic
+\item Then moving to \verb|HDL|s and letting the tools figure out the gates and the schematic
 
 \end{itemize}
 
 \subsection{VHDL}
 
-\verb|VHDL| was created in United states as some defense project for electronic simulation, then later used in logic modeling and simulation.
+\verb|VHDL| was created in the United States as part of a defense project for electronic simulation, and was later used for logic modeling and simulation.
 
 
-The most common standard used today is 1993, and recent standard are added after revision in 2006 and 2008.\\
+The most common standard used today is the 1993 one, and more recent standards were added after the revisions of 2006 and 2008.\\
 
 \newpage
 \underline{Simulation and Synthesis:}\\
 
-\verb|VHDL| is a language used for simulation and modeling, and there is allot of features that can't be used in synthesis.
+\verb|VHDL| is a language used for simulation and modeling, and there are a lot of features that can't be used in synthesis.
 
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.4,frame]{Figures/intro_hdl/vhdl_organisation}
-\caption{VHLD different sets of the language}
+\caption{The different subsets of the VHDL language}
 \label{fig:intro_hdl:vhdl_organisation}
 \end{figure}
 
 
 There is a subset of the language used for synthesis, and we have a specific style used for the logic synthesis called \textit{RTL style}, which will be the focus of this course.
 
-In companies, it is also common to have to whay is called \textit{corporate style}, that is some coding style specific to that company which uses features in certain way. In this course, we focus on Boing style.
+In companies, it is also common to have what is called a \textit{corporate style}, that is a coding style specific to that company which uses the language features in a certain way. In this course, we focus on the Boeing style.
 
 
 \newpage
 \subsection{FPGA}
 
-FPGA is a device composed of many cells, where each cells contains many LUT and FF. The complexity of an FPGA resides in the millions of ways to connect LUT and FF \textit{wihting a cell} and \textit{between cells also}. We use \verb|HDL| and let the tools figures out these connections.
+An FPGA is a device composed of many cells, where each cell contains many LUTs and FFs. The complexity of an FPGA lies in the millions of ways to connect LUTs and FFs, both \textit{within a cell} and \textit{between cells}. We use an \verb|HDL| and let the tools figure out these connections.
 
 \begin{figure}[h]
 \centering
@@ -89,25 +89,25 @@ FPGA is a device composed of many cells, where each cells contains many LUT and 
 \subsection{FPGA Configuration}
 \label{sub:fpga_conf}
 
-By FPGA configuration we mean the way the interconnection is made within the logic cell it self, and from 1 cell to another. This is done by loading these information using some static RAM (or any type of memory), where the SRAM can be transfer using flash memory, or JTAG cable, or some through some processor protocol like \verb|SPI|.
+By FPGA configuration we mean the way the interconnections are made within the logic cell itself, and from one cell to another. This is done by loading this information into a static RAM (or another type of memory), where the SRAM content can be transferred from a flash memory, through a JTAG cable, or through a processor protocol like \verb|SPI|.
 
-Once these configuration are transfer to make the connections, the connections are made throughout some siwthch boxes, within the cell itself, and from 1 cell to another.
+Once this configuration is transferred, the connections are made through switch boxes, within the cell itself and from one cell to another.
 
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.33,frame]{Figures/intro_hdl/fpga_conf}
-\caption{FPGA device}
+\caption{FPGA configuration}
 \label{fig:intro_hdl:fpga_conf}
 \end{figure}
 
-This step is defined and implemented is the $\mathrm{3}^\mathrm{rd}$ step of the FGPA desing flow (\ref{sec:desing_flow}), called \textit{place and route}.
+This is defined and implemented in the $\mathrm{3}^\mathrm{rd}$ step of the FPGA design flow (\ref{sec:desing_flow}), called \textit{place and route}.
 
 
 \newpage
-\section{Desing Flow}
+\section{Design Flow}
 \label{sec:desing_flow}
 
-Now we turn to the FPGA development process. We have 3 phases, as shown in \autoref{fig:intro_hdl:fpga_development_process}.
+Now we turn to the FPGA development process. It has 3 phases, as shown in \autoref{fig:intro_hdl:fpga_development_process}.
 
 \begin{figure}[h]
 \centering
@@ -119,30 +119,30 @@ Now we turn to the FPGA development process. We have 3 phases, as shown in \auto
 
 \begin{itemize}
 
-\item The $\mathrm{1}^\mathrm{st}$ step is the \textit{behavioral simulator}, that is we simulate behavioral description of our desing using tools such as \verb|Modelsim| or \verb|Vivado| from \verb|AMD|. 
+\item The $\mathrm{1}^\mathrm{st}$ step is the \textit{behavioral simulation}, that is we simulate the behavioral description of our design using tools such as \verb|Modelsim| or \verb|Vivado| from \verb|AMD|. 
 
-\item Once we make sure that the desing simulate the behavior correctly, we translate the behavioral description into logic.
+\item Once we are sure that the design simulates the behavior correctly, we translate the behavioral description into logic.
 
-This is done using \textit{synthesis tools}, such as \verb|Vivado| also.
+This is done using \textit{synthesis tools}, such as \verb|Vivado|.
 
-\item $\mathrm{3}^\mathrm{rd}$ step: place and route
+\item The $\mathrm{3}^\mathrm{rd}$ step is place and route
 
 \end{itemize}
 
 \subsection{Behavioral Simulation}
 \label{sub:behaviour_sim}
 
-In the $\mathrm{1}^\mathrm{st}$ part of the course, we will focus on behaviour simulation.\\
+In the $\mathrm{1}^\mathrm{st}$ part of the course, we will focus on behavioural simulation.\\
 
-The idea behind behavioral simulation is that we are simulating the behaviour of the \verb|VHDL| code, and not the logic synthesised yet. 
+The idea behind behavioral simulation is that we are simulating the behaviour of the \verb|VHDL| code, and not the synthesised logic. 
 
-This is done using waveform visualisation, that is giving our code a set of input (stimulus), and then we hope that our code produce the correct result, and be able to visulaize this using the waveforms.
+This is done using waveform visualisation, that is we give our code a set of inputs (stimuli), check that it produces the correct result, and visualise this using the waveforms.
 
 
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.4,frame]{Figures/intro_hdl/behaviour_sim}
-\caption{Behavioural simulation by using waveforms and set of stimulus}
+\caption{Behavioural simulation using waveforms and a set of stimuli}
 \label{fig:intro_hdl:behaviour_sim}
 \end{figure}
 
@@ -150,12 +150,12 @@ This is done using waveform visualisation, that is giving our code a set of inpu
 
 \subsection{Gate Level Simulation}
 
-This is the part we simulate tha actual logic synthesis by the tools. The goal is to hope that gate simulation mathces the behaviour simulations. It is always better to do both, and with experience we gain some confidence that our \verb|HDL| code produces the correct gate simulaitons.
+In this part, we simulate the actual logic synthesised by the tools. The goal is for the gate simulation to match the behavioural simulation. It is always better to do both, and with experience we gain confidence that our \verb|HDL| code produces correct gate simulations.
 
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.28,frame]{Figures/intro_hdl/gate_sim}
-\caption{Gate level simulation: output produce by actual gates}
+\caption{Gate level simulation: output produced by actual gates}
 \label{fig:intro_hdl:gate_sim}
 \end{figure}
 
@@ -165,40 +165,40 @@ This is the part we simulate tha actual logic synthesis by the tools. The goal i
 
 \item Sometimes we describe things that can't be translated into logic
 
-\item After synthesis, timing problems.
+\item After synthesis, we can have timing problems
 
 	\begin{itemize}
-	\item We learn how to correct these issues in another part of the course 
+	\item We will learn how to correct these issues in another part of the course 
 	\end{itemize}
 
 \end{itemize}
 
-\subsection{Wrapping up the desing flow}
+\subsection{Wrapping up the design flow}
 
 \autoref{fig:intro_hdl:desing_flow_sequence} presents another view of the development process seen in \autoref{fig:intro_hdl:fpga_development_process}.
 
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.4,frame]{Figures/intro_hdl/desing_flow_sequence}
-\caption{Desing flow}
+\caption{Design flow}
 \label{fig:intro_hdl:desing_flow_sequence}
 \end{figure}
 
 \begin{itemize}
 
-\item Before the running the simulation part (behavioural simulation as see in \ref{sub:behaviour_sim}), there is the compilation step where we can check for errors like syntax errors, langauges rules,$\cdots$
+\item Before running the simulation (behavioural simulation as seen in \ref{sub:behaviour_sim}), there is the compilation step, where we check for errors like syntax errors, language rules,$\cdots$
 
-\item Same concept for gate level simulation, we have to pass also the synthesis result step
+\item The same concept applies to gate level simulation: we also have to pass the synthesis step first
 
 \end{itemize}
 
 
 
 \newpage
-\section{VHDL is not a software}
+\section{VHDL is not software}
 \label{sub:vhdl_nature}
 
-It is important to keep in mind is not a traditional programming language, that is the final output is not binary or some executable like a \verb|C| program, which runs on some machine. As a matter of fact, we need to think of \verb|VHDL| as some kind of desing tools which let us \textit{describe the behaviour of our desing}, and then using vendors tools we synthesis this behavour into actual gates and circuit.
+It is important to keep in mind that \verb|VHDL| is not a traditional programming language, that is its final output is not a binary or an executable like a \verb|C| program which runs on some machine. Instead, we need to think of \verb|VHDL| as a kind of design tool which lets us \textit{describe the behaviour of our design}, and then, using vendor tools, we synthesise this behaviour into actual gates and circuits.
 
 \begin{figure}[h]
 \centering
@@ -207,18 +207,18 @@ It is important to keep in mind is not a traditional programming language, that 
 \label{fig:intro_hdl:vhdl_concept}
 \end{figure}
 
-So in other words, \verb|VHDL| is a tools which produces circuit, and not some binary.
+In other words, \verb|VHDL| is a tool which produces circuits, not binaries.
 
-After experience, we can imagine what is the circuit behind our \verb|VHDL| code lines .
+With experience, we can imagine the circuit behind our \verb|VHDL| code lines.
 
 
 \newpage
-\section{VHDL Desing}
+\section{VHDL Design}
 \label{sec:vhdl_desing}
 
-Now we move more toward the desing itself and \verb|VHDL| language.\\
+Now we move toward the design itself and the \verb|VHDL| language.\\
 
-There are 2 blocks to have a correct \verb|VHDL| module as seen in \autoref{fig:intro_hdl:vhdl_component}:
+A correct \verb|VHDL| module has 2 blocks, as seen in \autoref{fig:intro_hdl:vhdl_component}:
 
 \begin{figure}[h]
 \centering
@@ -229,17 +229,17 @@ There are 2 blocks to have a correct \verb|VHDL| module as seen in \autoref{fig:
 
 \begin{itemize}
 
-\item The input and output part, which are structured in \textit{entity} unit
+\item The input and output part, which is structured in the \textit{entity} unit
 
-\item The behavioral part, that is the actual work of the system, and it is contained in \textit{architecture} unit
+\item The behavioral part, that is the actual work of the system, which is contained in the \textit{architecture} unit
 
 \end{itemize}
 
-In \verb|VHDL| vocab, a complete \verb|VHDL| desing which is formed by an entity and a architecture is called \textit{component}.
+In \verb|VHDL| vocabulary, a complete \verb|VHDL| design formed by an entity and an architecture is called a \textit{component}.
 
 \subsection{Entity}
 
-The entity contains all input output of our desing. \autoref{fig:intro_hdl:vhdl_entity} shows the parameter and syntax of \verb|VHDL| entity
+The entity contains all the inputs and outputs of our design. \autoref{fig:intro_hdl:vhdl_entity} shows the parameters and syntax of a \verb|VHDL| entity.
 
 
 \begin{figure}[h]
@@ -251,17 +251,17 @@ The entity contains all input output of our desing. \autoref{fig:intro_hdl:vhdl_
 
 \begin{itemize}
 
-\item We begin by the keyword \verb|entity| and its name (\verb|MUX|)
+\item We begin with the keyword \verb|entity| and its name (\verb|MUX|)
 
-\item \verb|port()| contains a list of all input and output
+\item \verb|port()| contains a list of all inputs and outputs
 
-\item we type their name (\verb|A|) followed by \verb|:|
+\item We type their name (\verb|A|) followed by \verb|:|
 
 \item Their mode \verb|in| or \verb|out|
 
 \item Their type \verb|bit|
 
-\item Finally we use the \verb|end| and the name \verb|MUX|
+\item Finally, we use \verb|end| and the name \verb|MUX|
 
 \end{itemize}
 
@@ -269,15 +269,15 @@ The entity contains all input output of our desing. \autoref{fig:intro_hdl:vhdl_
 
 \begin{itemize}
 
-\item In \verb|VHDL|, an entity must be associated with some architecture, where we code our behaviour.
+\item In \verb|VHDL|, an entity must be associated with an architecture, where we code its behaviour.
 
-\item From a syntax: note that in \autoref{fig:intro_hdl:vhdl_entity} that the last \verb|;| is placed after the parenthesis, and not before
+\item Syntax note: in \autoref{fig:intro_hdl:vhdl_entity}, the last \verb|;| is placed after the parenthesis, not before it
 
 \end{itemize}
 
 \subsection{Architecture}
  
-The architecture is where we define our functional desing. 
+The architecture is where we define our functional design. 
  
 \begin{figure}[h]
 \centering
@@ -288,7 +288,7 @@ The architecture is where we define our functional desing.
  
 \begin{itemize}
 
-\item The $\mathrm{1}^\mathrm{st}$ line is the \textit{architecture declaration}, where we have the archi name (\verb|BEHAV|) and the associated entity (\verb|MUX|)
+\item The $\mathrm{1}^\mathrm{st}$ line is the \textit{architecture declaration}, where we have the architecture name (\verb|BEHAV|) and the associated entity (\verb|MUX|)
 
 \item After declaration, we use the keyword \verb|begin|
 
@@ -296,7 +296,7 @@ The architecture is where we define our functional desing.
 	\item Inside this \verb|begin| block, we put our code, that is the behavioural description of our system
 	\end{itemize}
 
-\item In the case of a MUX circuit, we put our behavioral description inside \verb|process| block, where we have some sequential statemets, that is statement executed one after another
+\item In the case of a MUX circuit, we put our behavioral description inside a \verb|process| block, which contains sequential statements, that is statements executed one after another
 
 \end{itemize} 
  
@@ -304,7 +304,7 @@ The architecture is where we define our functional desing.
 \subsection{Internal Signals}
 \label{sub:internal_sig}
 
-Any signal (like a variable) wich is defined in the entity can be used inside the archtiecture. However, sometimes we can use some internal signals, that is signal which are only visibile inside the architecture unit. An example is shown in \autoref{fig:intro_hdl:int_sig_ex}.
+Any signal (like a variable) which is defined in the entity can be used inside the architecture. However, sometimes we need internal signals, that is signals which are only visible inside the architecture unit. An example is shown in \autoref{fig:intro_hdl:int_sig_ex}.
 
 
 \begin{figure}[h]
@@ -316,11 +316,11 @@ Any signal (like a variable) wich is defined in the entity can be used inside th
 
 \begin{itemize}
 
-\item signal \verb|C| is declared inside the architecture, but in the entity
+\item Signal \verb|C| is declared inside the architecture, but not in the entity
 
-\item It is assigned to \verb|D| by wiring up to a \verb|NOT| gate
+\item It is assigned to \verb|D| by wiring it to a \verb|NOT| gate
 
-\item Then it is executed both in parallel with the process
+\item This statement is executed in parallel with the process
 
 \end{itemize}
 
@@ -328,35 +328,35 @@ Any signal (like a variable) wich is defined in the entity can be used inside th
 \subsection{Concurrency}
 \label{sub:concurrency}
 
-The statement defined outside a process but inside the architecture are executed in parallel with the processes. \autoref{fig:intro_hdl:and_gate_seq_vs_conc} present an example of \verb|AND| implementation
+The statements defined outside a process but inside the architecture are executed in parallel with the processes. \autoref{fig:intro_hdl:and_gate_seq_vs_conc} presents an example of an \verb|AND| implementation.
 
 
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.35,frame]{Figures/intro_hdl/and_gate_seq_vs_conc}
-\caption{and gate implementation using sequential and concurent style}
+\caption{AND gate implementation using sequential and concurrent styles}
 \label{fig:intro_hdl:and_gate_seq_vs_conc}
 \end{figure} 
 
 \begin{itemize}
 
-\item $\mathrm{1}^\mathrm{st}$ implementation sequential style using \verb|if-else|
+\item The $\mathrm{1}^\mathrm{st}$ implementation uses a sequential style with \verb|if-else|
 
-\item $\mathrm{2}^\mathrm{nd}$ style using \verb|and| keyword statement , which is concurrent
+\item The $\mathrm{2}^\mathrm{nd}$ one uses the \verb|and| keyword in a concurrent statement
 
 \end{itemize}
 
-As a desingers, we use a combination of both sequential and concurrent statements.\\
+As designers, we use a combination of sequential and concurrent statements.\\
 
-Also note that the order of execution of concurrent statement is not important, since they will all be executed in parallel using the capacity of FPGA.
+Also note that the order of concurrent statements is not important, since they are all executed in parallel using the capacity of the FPGA.
 
 \newpage
 \subsection{Process}
 \label{sub:process}
 
-As we saw processes contains statements that are executed sequentially.
+As we saw, processes contain statements that are executed sequentially.
 
-\autoref{fig:intro_hdl:process_syntax} presents paramter of \verb|VHDL| process.
+\autoref{fig:intro_hdl:process_syntax} presents the parameters of a \verb|VHDL| process.
 
 \begin{figure}[h]
 \centering
@@ -367,24 +367,24 @@ As we saw processes contains statements that are executed sequentially.
 
 \begin{itemize}
 
-\item Sensitivity list is used when a process will be executed
+\item The sensitivity list determines when a process is executed
 
 	\begin{itemize}
-	\item It is executed when at least 1 of the input is changed
+	\item It is executed when at least 1 of its inputs changes
 	\end{itemize}
 
 \end{itemize}
 
-Later we will see why we use sensitivity list in \verb|VHDL| (\autoref{sec:process_rules}). \\
+Later we will see why we use a sensitivity list in \verb|VHDL| (\autoref{sec:process_rules}). \\
 
 \newpage
 \section{Some VHDL Examples}
 
-In this section we take some example of some \verb|VHDL| code to get more practice.
+In this section we look at some \verb|VHDL| code examples to get more practice.
 
 \begin{itemize}
 
-\item \autoref{fig:intro_hdl:nor_gate} present the code of a \verb|NOR| gate
+\item \autoref{fig:intro_hdl:nor_gate} presents the code of a \verb|NOR| gate
 
 \begin{figure}[h]
 \centering
@@ -394,38 +394,38 @@ In this section we take some example of some \verb|VHDL| code to get more practi
 \end{figure}
 
 	\begin{itemize}
-	\item Like we use wire to connect circuit in schematic, in \verb|VHDL| we use \verb|signal| to do the connection
+	\item Just as we use wires to connect circuits in a schematic, in \verb|VHDL| we use \verb|signal|s to make the connections
 	
-	\item The code of \autoref{fig:intro_hdl:nor_gate} present an example of sequential statement interacting with concurrent statement \verb|D <= not C|
+	\item The code of \autoref{fig:intro_hdl:nor_gate} presents an example of a sequential statement interacting with the concurrent statement \verb|D <= not C|
 	\end{itemize}
 
 
 \newpage
-\item \autoref{fig:intro_hdl:vhdl_exp_2} presents an example of using 2 same statements, but one outside a process (inside the architecture), and the other inside a process 
+\item \autoref{fig:intro_hdl:vhdl_exp_2} presents an example of the same 2 statements used once outside a process (inside the architecture), and once inside a process 
 
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.4,frame]{Figures/intro_hdl/vhdl_exp_2}
-\caption{VHDL NOR gate}
+\caption{Same statements used concurrently and sequentially}
 \label{fig:intro_hdl:vhdl_exp_2}
 \end{figure}
 
 	\begin{itemize}
-	\item This illustrate the difference between sequential and concurrent code
+	\item This illustrates the difference between sequential and concurrent code
 	
-	\item In the $\mathrm{1}^\mathrm{st}$ behaviour, the same set of input (of logic) are driving the same wire. 
+	\item In the $\mathrm{1}^\mathrm{st}$ behaviour, two different logic inputs are driving the same wire. 
 	
-	This is isn't good because it causes a \textit{contention}
+	This isn't good because it causes \textit{contention}
 	
-	\item In the $\mathrm{2}^\mathrm{nd}$ beahviour, it turns out that the first statement get ignored, and only second statment get executed
+	\item In the $\mathrm{2}^\mathrm{nd}$ behaviour, it turns out that the first statement gets ignored, and only the second statement gets executed
 	
 	
 	\end{itemize}
 
-Actually this one of the \verb|process| rules, which states that:
+Actually, this is one of the \verb|process| rules, which state that:
 
 	\begin{itemize}
-	\item Only last valid assignement to a signal takes place inside a \verb|process|
+	\item Only the last valid assignment to a signal takes place inside a \verb|process|
 	
 	\item That assignment happens at \textit{the end} of a \verb|process|
 	\end{itemize}
@@ -440,65 +440,65 @@ Let's see the \verb|process| rules in this section.
 
 \begin{itemize}
 
-\item Process executes when inputs in the sensitivity list change
+\item A process executes when inputs in the sensitivity list change
 
-\item Process can only contains sequential statements
+\item A process can only contain sequential statements
 
-\item Signal assignment occurs at the \textit{end} \verb|process| statment
+\item Signal assignment occurs at the \textit{end} of the \verb|process| statement
 
 	\begin{itemize}
-	\item They don't happen when the statement get executed, they only happen at the end \verb|process|.
+	\item Assignments don't happen when the statement gets executed, they only happen at the end of the \verb|process|.
 	
 	
 	\end{itemize}	 
 
-\item Signal get the last executed assignment
+\item A signal gets the last executed assignment
 
 \end{itemize}
 
-These rules are a little bit of strang at first, but we will revisit them always and need to remember them, since these rules affect our way of designing our code and the sequential statement inside the \verb|process|.
+These rules are a little strange at first, but we will revisit them often and need to remember them, since they affect the way we design our code and the sequential statements inside the \verb|process|.
 
 \newpage
-\section{More about VHDL Langugage}
+\section{More about the VHDL Language}
 
-Throughout our progress, we learn more \verb|VHDL| concept and features as needed, so we can grasp concept in a sequential manner.
+As we progress, we learn more \verb|VHDL| concepts and features as needed, so we can grasp the concepts step by step.
 
  
 \subsection{Bit Vectors}
 \label{sub:bit_vectors}
 
-First let's start with signal that are larger than 1 bit, which are \verb|bit_vector|.
+First, let's start with signals that are larger than 1 bit, which are \verb|bit_vector|s.
 
-\verb|bit_vector| are group of bits, or from a programming side array of bits.\\
+A \verb|bit_vector| is a group of bits, or, from a programming point of view, an array of bits.\\
 
 An example is shown in \autoref{fig:intro_hdl:vhdl_vectors}.
 
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.4,frame]{Figures/intro_hdl/vhdl_vectors}
-\caption{Vectors variables in VHDL}
+\caption{Vector signals in VHDL}
 \label{fig:intro_hdl:vhdl_vectors}
 \end{figure}
 
 \begin{itemize}
 
-\item We have \verb|Y_NIB| and \verb|Z_BYTE|, 4 and 8 bit vectors respectevely
+\item We have \verb|Y_NIB| and \verb|Z_BYTE|, 4 and 8 bit vectors respectively
 
-\item Note for vectors we use double quotation \verb|""|, as opposed to signal which use single quotation \verb|''| for 1 bit case
+\item Note that for vectors we use double quotes \verb|""|, as opposed to single-bit signals, which use single quotes \verb|''|
 
-\item For indices: they are going from left to right as shown in the $\mathrm{2}^\mathrm{nd}$ part of \autoref{fig:intro_hdl:vhdl_vectors}, with a description in the middle \verb|downto| or \verb|upto|
+\item For indices: they go from left to right as shown in the $\mathrm{2}^\mathrm{nd}$ part of \autoref{fig:intro_hdl:vhdl_vectors}, with the keyword \verb|downto| (descending) or \verb|to| (ascending) in the middle
 
 \end{itemize}
 
 \newpage
 \subsection{Bad code: vector mismatch}
 
-Nice thing about \verb|VHDL| it is a strict languafe, it won't let you assign vectors to different size, or of different type. An example of bad code is shown in \autoref{fig:intro_hdl:vectors_bad_code}.
+A nice thing about \verb|VHDL| is that it is a strict language: it won't let you assign vectors of different sizes or of different types. An example of bad code is shown in \autoref{fig:intro_hdl:vectors_bad_code}.
 
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.4,frame]{Figures/intro_hdl/vectors_bad_code}
-\caption{Vectors bad code}
+\caption{Vector bad code}
 \label{fig:intro_hdl:vectors_bad_code}
 \end{figure}
 
@@ -506,15 +506,15 @@ Nice thing about \verb|VHDL| it is a strict languafe, it won't let you assign ve
 
 \item We have 2 concurrent statements
 
-\item The $\mathrm{1}^\mathrm{st}$ statement we get a compile time error since we are trying to assign to \verb|Z_BYTE| from 4 vector, and also a wrong type variable (\verb|X_INT| is integer)
+\item In the $\mathrm{1}^\mathrm{st}$ statement, we get a compile-time error since we are trying to assign to \verb|Z_BYTE| from a 4-bit vector, and also from a variable of the wrong type (\verb|X_INT| is an integer)
 
-\item The $\mathrm{2}^\mathrm{nd}$ statement is also wrong since \verb|Y_NIB| is 4 bit vector, whereas \verb|Z_BYTE| is 8 bit vector
+\item The $\mathrm{2}^\mathrm{nd}$ statement is also wrong since \verb|Y_NIB| is a 4-bit vector, whereas \verb|Z_BYTE| is an 8-bit vector
 
 \end{itemize}
 
 \subsection{Code comments}
 
-In \verb|VHDL| comments are insetered after 2 dashes \verb|--|. An example is shown in \autoref{fig:intro_hdl:vhdl_comment}.
+In \verb|VHDL|, comments are inserted after 2 dashes \verb|--|. An example is shown in \autoref{fig:intro_hdl:vhdl_comment}.
 
 \begin{figure}[h]
 \centering
@@ -523,18 +523,18 @@ In \verb|VHDL| comments are insetered after 2 dashes \verb|--|. An example is sh
 \label{fig:intro_hdl:vhdl_comment}
 \end{figure}
 
-However in \verb|VHDL|, there isn't a block comment feature as in some other programming language.
+However, \verb|VHDL| has no block comment feature as some other programming languages do.
 
-\subsection{VHDL syntax exercice}
+\subsection{VHDL syntax exercise}
 
-\verb|VHDL| is a strict language, and we often need time and practice to get use to it. If we make some mistakes, the compiler gives errors, but it will be hard to find where these error happens, so we need to practice on the syntax and rules. \\
+\verb|VHDL| is a strict language, and we often need time and practice to get used to it. If we make mistakes, the compiler gives errors, but it can be hard to find where these errors happen, so we need to practice the syntax and rules. \\
 
-\underline{Given:} \autoref{fig:intro_hdl:vhdl_exercice_syntax} contains a \verb|VHDL| code with some errors. Try to spot the errors.
+\underline{Given:} \autoref{fig:intro_hdl:vhdl_exercice_syntax} contains \verb|VHDL| code with some errors. Try to spot them.
 
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.4,frame]{Figures/intro_hdl/vhdl_exercice_syntax}
-\caption{VHDL syntax exercice}
+\caption{VHDL syntax exercise}
 \label{fig:intro_hdl:vhdl_exercice_syntax}
 \end{figure}
 
@@ -542,7 +542,7 @@ However in \verb|VHDL|, there isn't a block comment feature as in some other pro
 
 \begin{itemize}
 
-\item $\mathrm{1}^\mathrm{st}$ error in the \verb|entity| declaration, we are missing the last parenthesis before the last semicolone 
+\item $\mathrm{1}^\mathrm{st}$ error: in the \verb|entity| declaration, we are missing the closing parenthesis before the last semicolon 
 
 	\begin{itemize}
 	\item $\leftrightarrow$ \verb|D:out bit);|
@@ -550,7 +550,7 @@ However in \verb|VHDL|, there isn't a block comment feature as in some other pro
 
 
 
-\item $\mathrm{2}^\mathrm{nd}$ in the \verb|architecture| we are referring to the wrong \verb|entity| name
+\item $\mathrm{2}^\mathrm{nd}$ error: in the \verb|architecture|, we are referring to the wrong \verb|entity| name
 
 	\begin{itemize}
 	\item It should be \verb|TEST| instead of \verb|ORGATE| 
@@ -559,18 +559,18 @@ However in \verb|VHDL|, there isn't a block comment feature as in some other pro
 	
 	\end{itemize}
 
-\item Signal declaration is missing for variable \verb|C|
+\item The signal declaration is missing for signal \verb|C|
 
 	\begin{itemize}
-	\item it should be declared after the \verb|architecture|, and before the $\mathrm{1}^\mathrm{st}$ \verb|begin| statement
+	\item It should be declared after the \verb|architecture| line, and before the $\mathrm{1}^\mathrm{st}$ \verb|begin| statement
 	
 	\item $\leftrightarrow$ \verb|signal C : bit| (see \ref{sub:internal_sig} and \autoref{fig:intro_hdl:int_sig_ex})
 	\end{itemize}
 
-\item At last, we are ending with the wrong architecture name
+\item Finally, we are ending with the wrong architecture name
 
 	\begin{itemize}
-	\item it should be \verb|RTL| instead of \verb|BEAHV|
+	\item It should be \verb|RTL| instead of \verb|BEAHV|
 	
 	\item $\leftrightarrow$ \verb|end RTL|
 	\end{itemize}
@@ -584,18 +584,18 @@ However in \verb|VHDL|, there isn't a block comment feature as in some other pro
 
 \begin{itemize}
 
-\item Basic idea behind \verb|HDL|: give our desing some desing or behaviour, and let the tools figure out the underlying logic and gates (\ref{sec:why_hdl})
+\item Basic idea behind \verb|HDL|s: describe the function or behaviour of our design, and let the tools figure out the underlying logic and gates (\ref{sec:why_hdl})
 
-\item Desing evolution: transistor $\rightarrow$ gates and logic $\rightarrow$ \verb|HDL| (\ref{sub:desing_evolution})
+\item Design evolution: transistors $\rightarrow$ gates and logic $\rightarrow$ \verb|HDL| (\ref{sub:desing_evolution})
 
-\item  The output of a \verb|VHDL| (or any \verb|HDL|) is a circuit, and not a binary or some executable like known programming languages (\ref{sub:vhdl_nature})
+\item  The output of \verb|VHDL| (or any \verb|HDL|) is a circuit, not a binary or an executable as with common programming languages (\ref{sub:vhdl_nature})
 
-\item Development process of an FPGA (\ref{sec:desing_flow}): we have mainly 3 steps
+\item Development process of an FPGA (\ref{sec:desing_flow}): there are 3 main steps
 
 	\begin{enumerate}
-	\item Behavioral simulation: writing code, compiling the code then verify the behaviour using a set of stimilus and visualise them  by waveforms
+	\item Behavioral simulation: writing the code, compiling it, then verifying the behaviour using a set of stimuli and visualising the results with waveforms
 	
-	\item Gate level simulation: which include synthesis verification, then checking if output of logic gates is correct or not
+	\item Gate level simulation: includes synthesis verification, then checking whether the output of the logic gates is correct
 	
 	\item Place and route: make the connections within and between FPGA cells (review \ref{sub:fpga_conf} for more details about connections)		
 		
@@ -608,15 +608,15 @@ Now regarding \verb|VHDL| (\ref{sec:vhdl_desing}):
 
 \begin{itemize}
 
-\item From a language desing:
+\item From a language design point of view:
 
 	\begin{itemize}
 	
-	\item Mainly a \verb|VHDL| program consist of 2 parts: entity and architecture
+	\item A \verb|VHDL| program mainly consists of 2 parts: entity and architecture
 	
-	\item Entity: we list input and output, and all their relative information (their types, modes,$\cdots$)
+	\item Entity: we list the inputs and outputs, and all their related information (types, modes,$\cdots$)
 	
-	\item Architecture: contains the body of our code, and consist of describing how the system work 
+	\item Architecture: contains the body of our code, which describes how the system works 
 			
 	\end{itemize}
 
@@ -624,29 +624,29 @@ Now regarding \verb|VHDL| (\ref{sec:vhdl_desing}):
 
  \begin{itemize}
 	
- \item Anything after the architecture delaration is executed in parallel 		
+ \item Anything after the architecture declaration is executed in parallel 		
 
- \item An architecture is a combination of many processes, internal variables declaration, $\cdots$ 
+ \item An architecture is a combination of processes, internal signal declarations, $\cdots$ 
  
- \item A \verb|VHDL| rule: an architecture must be associated to some entity
+ \item A \verb|VHDL| rule: an architecture must be associated with an entity
 
  \end{itemize}
 
 \item In a \verb|process|
 
 	\begin{itemize}
-	\item all the code is executed sequentially 
+	\item All the code is executed sequentially 
 	
-	\item The process should contains a sensitivity list $\leftrightarrow$ \verb|process(A,B)|
+	\item The process should contain a sensitivity list $\leftrightarrow$ \verb|process(A,B)|
 	
-	\item We say that this process is \textit{sensitiv} to \verb|A| and \verb|B|
+	\item We say that this process is \textit{sensitive} to \verb|A| and \verb|B|
 	\end{itemize}
 
 
-\item A \verb|VHDL| code usually consist of a combination of sequential and concurrent statement.
+\item \verb|VHDL| code usually consists of a combination of sequential and concurrent statements.
 
 	\begin{itemize}
-	\item Order of execution of concurrent statement is not important, since all statement are executed simulatenously, using FPGA (hardware) capacity (\ref{sub:process})
+	\item The order of concurrent statements is not important, since all statements are executed simultaneously, using the FPGA (hardware) capacity (\ref{sub:concurrency})
 	\end{itemize}
 
 
